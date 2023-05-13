@@ -56,7 +56,7 @@
     "chart": {
       "收入": {
         "bind": "income",
-        "link": "/x/Table/pet",
+        "link": "/x/Table/demo.pet",
         "out": "scripts.stat.Income",
         "view": {
           "type": "NumberChart",
@@ -70,7 +70,7 @@
       },
       "支出": {
         "bind": "cost",
-        "link": "/x/Table/pet",
+        "link": "/x/Table/demo.pet",
         "view": {
           "type": "NumberChart",
           "props": {
@@ -84,7 +84,7 @@
       },
       "综合评分": {
         "bind": "rate",
-        "link": "/x/Table/pet",
+        "link": "/x/Table/demo.pet",
         "view": {
           "type": "NumberChart",
           "props": {
@@ -98,7 +98,7 @@
       },
       "收入_折线图": {
         "bind": "income",
-        "link": "/x/Table/pet",
+        "link": "/x/Table/demo.pet",
         "view": {
           "type": "NumberChart",
           "props": {
@@ -113,13 +113,12 @@
       },
       "支出_折线图": {
         "bind": "cost",
-        "link": "/x/Table/pet",
+        "link": "/x/Table/demo.pet",
         "view": {
           "type": "NumberChart",
           "props": {
             "cardStyle": { "padding": 0 },
             "type": "line",
-
             "color": "red",
             "prefix": "¥",
             "decimals": 2,
@@ -130,13 +129,12 @@
       },
       "综合评分_折线图": {
         "bind": "rate",
-        "link": "/x/Table/pet",
+        "link": "/x/Table/demo.pet",
         "view": {
           "type": "NumberChart",
           "props": {
             "cardStyle": { "padding": 0 },
             "type": "line",
-
             "color": "orange",
             "unit": "分",
             "decimals": 1,
@@ -147,7 +145,7 @@
       },
       "宠物数量": {
         "bind": "pet_count",
-        "link": "/x/Table/pet",
+        "link": "/x/Table/demo.pet",
         "view": {
           "type": "Number",
           "props": { "unit": "个" }
@@ -176,7 +174,7 @@
       },
       "宠物数量_上月": {
         "bind": "prev_pet_count",
-        "link": "/x/Table/pet",
+        "link": "/x/Table/demo.pet",
         "view": {
           "type": "Number",
           "props": {
@@ -188,7 +186,7 @@
       },
       "宠物类型_上月": {
         "bind": "prev_pet_type",
-        "link": "/x/Table/pet",
+        "link": "/x/Table/demo.pet",
         "view": {
           "type": "Number",
           "props": {
@@ -200,7 +198,7 @@
       },
       "当月收入_上月": {
         "bind": "prev_income_monthly",
-        "link": "/x/Table/pet",
+        "link": "/x/Table/demo.pet",
         "view": {
           "type": "Number",
           "props": {
@@ -212,7 +210,7 @@
       },
       "医师数量_上月": {
         "bind": "prev_doctor_count",
-        "link": "/x/Table/pet",
+        "link": "/x/Table/demo.pet",
         "view": {
           "type": "Number",
           "props": {
@@ -224,7 +222,7 @@
       },
       "类型排布": {
         "bind": "datasource_type",
-        "link": "/x/Table/pet",
+        "link": "/x/Table/demo.pet",
         "view": {
           "type": "Pie",
           "props": {

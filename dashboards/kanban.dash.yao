@@ -22,7 +22,6 @@
     "dashboard": {
       "宠物数量": {
         "bind": "pet_count",
-        "link": "/x/Table/pet",
         "view": { "type": "chart/Number", "props": { "unit": "个" } }
       },
       "宠物类型": {
@@ -39,7 +38,6 @@
       },
       "收入": {
         "bind": "income",
-        "link": "/x/Table/pet",
         "out": "scripts.stat.Income",
         "view": {
           "type": "chart/NumberChart",
@@ -53,7 +51,6 @@
       },
       "支出": {
         "bind": "cost",
-        "link": "/x/Table/pet",
         "view": {
           "type": "chart/NumberChart",
           "props": {
@@ -67,7 +64,6 @@
       },
       "综合评分": {
         "bind": "rate",
-        "link": "/x/Table/pet",
         "view": {
           "type": "chart/NumberChart",
           "props": {
