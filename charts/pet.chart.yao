@@ -1,12 +1,10 @@
 {
   "name": "数据图表",
-  "config": {
-    "full": false
-  },
+  "config": { "full": false },
   "action": {
     "before:data": "scripts.stat.BeforeData",
     "data": {
-      "process": "scripts.stat.Data",
+      "process": "flows.stat.Data",
       "default": ["2022-09-20"]
     },
     "after:data": "scripts.stat.AfterData"
@@ -63,7 +61,6 @@
         "view": {
           "type": "NumberChart",
           "props": {
-            "chartHeight": 150,
             "prefix": "¥",
             "decimals": 2,
             "nameKey": "date",
@@ -77,7 +74,6 @@
         "view": {
           "type": "NumberChart",
           "props": {
-            "chartHeight": 150,
             "color": "red",
             "prefix": "¥",
             "decimals": 2,
@@ -92,7 +88,6 @@
         "view": {
           "type": "NumberChart",
           "props": {
-            "chartHeight": 150,
             "color": "orange",
             "unit": "分",
             "decimals": 1,
@@ -109,7 +104,6 @@
           "props": {
             "cardStyle": { "padding": 0 },
             "type": "line",
-            "chartHeight": 120,
             "prefix": "¥",
             "decimals": 2,
             "nameKey": "date",
@@ -125,7 +119,7 @@
           "props": {
             "cardStyle": { "padding": 0 },
             "type": "line",
-            "chartHeight": 120,
+
             "color": "red",
             "prefix": "¥",
             "decimals": 2,
@@ -142,7 +136,7 @@
           "props": {
             "cardStyle": { "padding": 0 },
             "type": "line",
-            "chartHeight": 120,
+
             "color": "orange",
             "unit": "分",
             "decimals": 1,
@@ -234,7 +228,6 @@
         "view": {
           "type": "Pie",
           "props": {
-            "height": 240,
             "nameKey": "type",
             "series": [
               {
@@ -262,7 +255,6 @@
         "view": {
           "type": "Bar",
           "props": {
-            "height": 240,
             "nameKey": "status",
             "axisLabel": {
               "interval": 0,
@@ -295,7 +287,6 @@
         "view": {
           "type": "LineBar",
           "props": {
-            "height": 240,
             "nameKey": "name",
             "axisLabel": { "interval": 0, "fontSize": 12 },
             "series": [
