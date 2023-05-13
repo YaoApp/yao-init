@@ -4,7 +4,7 @@
 function Data() {
   return Process(
     "yao.table.Insert",
-    "pet",
+    "demo.pet",
     ["name", "type", "status", "mode", "stay", "cost"],
     [
       ["Cookie", "cat", "checked", "enabled", 200, 105],
