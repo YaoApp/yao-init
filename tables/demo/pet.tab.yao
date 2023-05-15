@@ -288,8 +288,8 @@
         "view": {
           "type": "Switch",
           "props": {
-            "checkedValue": 1,
-            "unCheckedValue": 0,
+            "checkedValue": "1",
+            "unCheckedValue": "0",
             "checkedChildren": "开启",
             "unCheckedChildren": "关闭"
           }

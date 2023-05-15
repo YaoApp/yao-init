@@ -221,11 +221,11 @@
             "options": [
               {
                 "label": "开启",
-                "value": 1
+                "value": "1"
               },
               {
                 "label": "关闭",
-                "value": 0
+                "value": "0"
               }
             ]
           }
