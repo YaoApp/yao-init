@@ -40,6 +40,19 @@
       "index": true
     },
     {
+      "name": "detail",
+      "label": "详细描述",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "appearance",
+      "label": "宠物外观",
+      "type": "json",
+      "nullable": true
+    },
+
+    {
       "name": "curing_status",
       "label": "治疗状态",
       "type": "enum",
@@ -47,7 +60,12 @@
       "option": ["0", "1", "2"],
       "index": true
     },
-    { "name": "stay", "label": "入院时间", "type": "integer" },
+    {
+      "name": "stay",
+      "label": "入院时间",
+      "type": "datetime",
+      "nullable": true
+    },
     { "name": "cost", "label": "花费", "type": "integer" },
     {
       "name": "images",
