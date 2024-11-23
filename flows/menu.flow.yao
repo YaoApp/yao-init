@@ -1,0 +1,25 @@
+// icons
+// * feather icon https://feathericons.com/ icon-* eg: icon-activity
+// * material symbols https://fonts.google.com/icons?icon.set=Material+Symbols  material-*  eg: material-favorite
+// * material icons https://fonts.google.com/icons?icon.set=Material+Icons   *-outline *-filled eg: person_pin_circle-outline settings-filled
+//
+{
+  "name": "Menu",
+  "nodes": [],
+  "output": {
+    "items": [
+      {
+        "name": "Generator",
+        "path": "/iframe?src=https://moapi.ai/iframe/yaoapp",
+        "icon": "material-mark_chat_unread"
+      }
+    ],
+    "setting": [
+      {
+        "icon": { "name": "material-person_pin_circle", "size": 22 },
+        "name": "Accounts",
+        "path": "/x/Table/account"
+      }
+    ]
+  }
+}

@@ -1,4 +1,7 @@
-.env
-db
-data
-logs
+db/*
+!db/README.md
+data/*
+!data/README.md
+!data/templates
+logs/* 
+moapi.env.sh

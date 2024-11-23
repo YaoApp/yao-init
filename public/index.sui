@@ -1,0 +1,29 @@
+<!DOCTYPE html><html><head>
+    <meta charset="UTF-8"/>
+    <title>{{ $global.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type"/>
+    <meta name="description" content="SUI Flowbite Startup"/>
+  <script s:ns="" s:cn="" s:hash="script_5f50a1db8f374703" src="/assets/libsui.min.js" type="text/javascript" name="libsui"></script>
+</head>
+  <body s:ns="ns_a17c1dec10d62df5" s:public="/" s:assets="/assets">
+    <div class="container"><div>Hi, Here is the default index page of SUI Template Engine.</div>
+</div>
+  
+
+
+
+<script name="config" type="json">
+{"dataCache":0,"api":null,"root":"/","title":"","guard":"","cacheStore":"","cache":0}
+</script>
+
+
+
+<script name="global" type="json">
+{
+  "title": "Yao Demo App"
+}
+
+</script>
+
+</body></html>

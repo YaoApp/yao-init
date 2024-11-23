@@ -1,0 +1,23 @@
+{
+  "name": "Pet",
+  "table": { "name": "tests_pet", "comment": "Pets" },
+  "columns": [
+    { "name": "id", "comment": "ID", "type": "ID", "label": "ID" },
+    {
+      "label": "Pet Name",
+      "name": "name",
+      "comment": "Name of the pet",
+      "type": "string",
+      "length": 255,
+      "nullable": false
+    },
+    {
+      "label": "Description",
+      "name": "description",
+      "comment": "Description of the pet",
+      "type": "text",
+      "nullable": true
+    }
+  ],
+  "option": { "timestamps": true }
+}

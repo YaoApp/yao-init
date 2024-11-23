@@ -1,12 +1,8 @@
 {
-  "name": "::Admin Login",
-  "action": {
-    "process": "yao.login.Admin",
-    "args": [":payload"]
-  },
+  "name": "Admin Login",
+  "action": { "process": "yao.login.Admin", "args": [":payload"] },
   "layout": {
-    "entry": "/x/Dashboard/kanban",
-    "slogan": "::Make Your Dream With Yao App Engine",
-    "site": "https://yaoapps.com?from=instance-admin-login"
+    "entry": "/iframe?src=https://moapi.ai/iframe/yaoapp",
+    "site": "https://moapi.ai?from=instance-yaoapp"
   }
 }
