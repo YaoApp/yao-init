@@ -3,5 +3,6 @@ db/*
 data/*
 !data/README.md
 !data/templates
-logs/* 
+logs/*
+!logs/README.md
 moapi.env.sh

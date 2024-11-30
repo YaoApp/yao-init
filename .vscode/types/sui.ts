@@ -354,7 +354,7 @@ export function $Backend<T = any>(
   route?: string,
   headers?: [string, string][] | Record<string, string> | Headers
 ): SUIBackend {
-  return new SUIBackend<T>(route, headers);
+  return new SUIBackend<T>(route as string, headers as any);
 }
 
 /**
@@ -426,7 +426,7 @@ export class Yao {
    * @param {Headers} headers
    */
   async Get(path: string, params?: object, headers?: Headers) {
-    return this.Fetch("GET", path, params, null, headers);
+    return this.Fetch("GET", path, params, undefined, headers);
   }
 
   /**
@@ -454,7 +454,14 @@ export class Yao {
     headers?: Headers
   ) {
     try {
-      const blob = await this.Fetch("GET", path, params, null, headers, true);
+      const blob = await this.Fetch(
+        "GET",
+        path,
+        params,
+        undefined,
+        headers,
+        true
+      );
       const objectUrl = window.URL.createObjectURL(blob);
       const anchor = document.createElement("a");
       document.body.appendChild(anchor);
@@ -486,7 +493,7 @@ export class Yao {
   ): Promise<any> {
     params = params || {};
     headers = headers || {};
-    data = data || null;
+    data = data || undefined;
 
     let url = `${this.host}${path}`;
     const queryString = this.Serialize(params);
