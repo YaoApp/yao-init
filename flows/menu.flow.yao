@@ -10,7 +10,7 @@
     "items": [
       {
         "name": "Generator",
-        "path": "/iframe?src=https://moapi.ai/iframe/yaoapp",
+        "path": "/iframe?src=https%3A%2F%2Fmoapi.ai%2Fiframe%2Fyaoapp%3F__locale%3D%7B%7B__locale%7D%7D%26__theme%3D%7B%7B__theme%7D%7D",
         "icon": "material-mark_chat_unread"
       }
     ],
