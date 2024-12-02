@@ -56,3 +56,45 @@ export type MigrateOption = {
    */
   reset: boolean;
 };
+
+/**
+ * Represents a dataset with pagination information.
+ * This type is commonly used for paginated data retrieval,
+ * such as search results or lists with multiple pages.
+ */
+export type PagedData = {
+  /**
+   * The data items.
+   */
+  data: Record<string, any>[];
+
+  /**
+   * The next page number. -1 no next page.
+   */
+  next: number;
+
+  /**
+   * The current page number.
+   */
+  page: number;
+
+  /**
+   * The total number of pages.
+   */
+  pagecnt: number;
+
+  /**
+   * The number of items per page.
+   */
+  pagesize: number;
+
+  /**
+   * The previous page number. -1 no previous page.
+   */
+  prev: number;
+
+  /**
+   * The total number of items.
+   */
+  total: number;
+};

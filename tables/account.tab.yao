@@ -1,7 +1,8 @@
 {
   "name": "Administrators",
   "action": {
-    "bind": { "model": "admin.user", "option": { "form": "account" } }
+    "bind": { "model": "admin.user", "option": { "form": "account" } },
+    "after:search": "scripts.account.AfterSearch"
   },
   "layout": {
     "header": {},
