@@ -1,0 +1,18 @@
+{
+  "label": "DeepSeek R1 (Volcengine)",
+  "type": "openai",
+  "options": {
+    "model": "deepseek-r1-250120",
+    "key": "$ENV.VOLCENGINE_API_KEY",
+    "proxy": "https://ark.cn-beijing.volces.com/api/v3",
+    "capabilities": {
+      "vision": false,
+      "tool_calls": false,
+      "audio": false,
+      "reasoning": true,
+      "streaming": true,
+      "json": true,
+      "multimodal": false
+    }
+  }
+}

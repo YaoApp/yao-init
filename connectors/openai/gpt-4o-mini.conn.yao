@@ -1,0 +1,18 @@
+{
+  "label": "GPT-4o Mini",
+  "type": "openai",
+  "options": {
+    "model": "gpt-4o-mini",
+    "key": "$ENV.OPENAI_API_KEY",
+    "proxy": "https://api.openai.com/v1",
+    "capabilities": {
+      "vision": "openai",
+      "tool_calls": true,
+      "audio": false,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": true
+    }
+  }
+}

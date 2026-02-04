@@ -1,0 +1,18 @@
+{
+  "label": "Text Embedding 3 Large",
+  "type": "openai",
+  "options": {
+    "model": "text-embedding-3-large",
+    "key": "$ENV.OPENAI_API_KEY",
+    "proxy": "https://api.openai.com/v1",
+    "capabilities": {
+      "vision": false,
+      "tool_calls": false,
+      "audio": false,
+      "reasoning": false,
+      "streaming": false,
+      "json": false,
+      "multimodal": false
+    }
+  }
+}

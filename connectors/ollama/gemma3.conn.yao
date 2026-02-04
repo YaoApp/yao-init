@@ -1,0 +1,18 @@
+{
+  "label": "Gemma 3 (Ollama)",
+  "type": "openai",
+  "options": {
+    "model": "gemma3",
+    "key": "ollama",
+    "proxy": "$ENV.OLLAMA_HOST",
+    "capabilities": {
+      "vision": "openai",
+      "tool_calls": false,
+      "audio": false,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": true
+    }
+  }
+}

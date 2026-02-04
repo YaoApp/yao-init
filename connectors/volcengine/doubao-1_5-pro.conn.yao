@@ -1,0 +1,18 @@
+{
+  "label": "Doubao 1.5 Pro (Volcengine)",
+  "type": "openai",
+  "options": {
+    "model": "doubao-1-5-pro-256k",
+    "key": "$ENV.VOLCENGINE_API_KEY",
+    "proxy": "https://ark.cn-beijing.volces.com/api/v3",
+    "capabilities": {
+      "vision": false,
+      "tool_calls": true,
+      "audio": false,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": false
+    }
+  }
+}

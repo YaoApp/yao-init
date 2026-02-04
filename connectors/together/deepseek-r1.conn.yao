@@ -1,0 +1,18 @@
+{
+  "label": "DeepSeek R1 (Together)",
+  "type": "openai",
+  "options": {
+    "model": "deepseek-ai/DeepSeek-R1",
+    "key": "$ENV.TOGETHER_API_KEY",
+    "proxy": "https://api.together.xyz/v1",
+    "capabilities": {
+      "vision": false,
+      "tool_calls": false,
+      "audio": false,
+      "reasoning": true,
+      "streaming": true,
+      "json": true,
+      "multimodal": false
+    }
+  }
+}

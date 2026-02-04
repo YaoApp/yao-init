@@ -1,0 +1,18 @@
+{
+  "label": "DeepSeek Reasoner",
+  "type": "openai",
+  "options": {
+    "model": "deepseek-reasoner",
+    "key": "$ENV.DEEPSEEK_API_KEY",
+    "proxy": "https://api.deepseek.com/v1",
+    "capabilities": {
+      "vision": false,
+      "tool_calls": false,
+      "audio": false,
+      "reasoning": true,
+      "streaming": true,
+      "json": true,
+      "multimodal": false
+    }
+  }
+}

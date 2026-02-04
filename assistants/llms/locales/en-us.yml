@@ -1,0 +1,10 @@
+name: LLM Chat Test
+description: Test assistant for LLM chat capabilities
+chat:
+  title: LLM Chat Test
+  description: Test basic chat and conversation abilities
+  prompts:
+    - Hello
+    - What can you do?
+    - Tell me a short joke
+

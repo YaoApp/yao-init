@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="{{ $locale }}" data-theme="{{ $theme }}">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+      {{ title[$locale] ?? title['en-us'] ?? title ?? $global.title }}
+    </title>
+    <meta
+      name="description"
+      content="{{ description[$locale] ?? description['en-us'] ?? description ?? $global.description[$locale] ?? $global.description['en-US'] }}"
+    />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta
+      content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff"
+      http-equiv="Content-Type"
+    />
+    <link rel="icon" type="image/png" href="@assets/images/icons/app.png" />
+
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="@assets/css/vars.css" />
+
+    <!-- Prevent FOUC: Apply theme/locale before render -->
+    <script>
+      (function () {
+        // Hide body until ready
+        document.documentElement.style.visibility = "hidden";
+
+        // Storage keys (compatible with CUI/xgen)
+        var THEME_KEY = "xgen:xgen_theme";
+        var LOCALE_KEY = "umi_locale";
+
+        // Read from localStorage first
+        function getStoredTheme() {
+          try {
+            var stored = localStorage.getItem(THEME_KEY);
+            if (stored) {
+              var data = JSON.parse(stored);
+              return data.value || "light";
+            }
+          } catch (e) {}
+          return "light";
+        }
+
+        function getStoredLocale() {
+          try {
+            var stored = localStorage.getItem(LOCALE_KEY);
+            if (stored) {
+              return stored.toLowerCase().startsWith("zh") ? "zh-CN" : "en-US";
+            }
+          } catch (e) {}
+          var lang = navigator.language || "";
+          return lang.toLowerCase().startsWith("zh") ? "zh-CN" : "en-US";
+        }
+
+        // Apply initial values
+        var theme = getStoredTheme();
+        var locale = getStoredLocale();
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.setAttribute("lang", locale);
+
+        // Check if embedded in CUI iframe
+        var isEmbedded = false;
+        try {
+          isEmbedded = window.parent !== window && !!window.parent.postMessage;
+        } catch (e) {}
+
+        if (isEmbedded) {
+          // Request setup from CUI parent
+          var setupReceived = false;
+          var setupTimeout = null;
+
+          function showPage() {
+            document.documentElement.style.visibility = "";
+          }
+
+          window.addEventListener("message", function (e) {
+            if (e.origin !== window.location.origin) return;
+            if (e.data && e.data.type === "setup") {
+              setupReceived = true;
+              if (setupTimeout) clearTimeout(setupTimeout);
+
+              var msg = e.data.message || {};
+              if (msg.theme) {
+                document.documentElement.setAttribute("data-theme", msg.theme);
+                try {
+                  localStorage.setItem(
+                    THEME_KEY,
+                    JSON.stringify({ type: "String", value: msg.theme })
+                  );
+                } catch (e) {}
+              }
+              if (msg.locale) {
+                var normalizedLocale = msg.locale.toLowerCase().startsWith("zh")
+                  ? "zh-CN"
+                  : "en-US";
+                document.documentElement.setAttribute("lang", normalizedLocale);
+                try {
+                  localStorage.setItem(LOCALE_KEY, normalizedLocale);
+                } catch (e) {}
+              }
+
+              showPage();
+            }
+          });
+
+          // Request setup from parent
+          window.parent.postMessage(
+            { type: "request", message: { name: "setup" } },
+            window.location.origin
+          );
+
+          // Fallback: show page after timeout if no response
+          setupTimeout = setTimeout(function () {
+            if (!setupReceived) {
+              showPage();
+            }
+          }, 200);
+        } else {
+          // Not embedded, show immediately
+          document.documentElement.style.visibility = "";
+        }
+      })();
+    </script>
+  </head>
+  <body data-theme="{{ $theme }}" dir="{{ $direction }}">
+    <div class="container">{{ __page }}</div>
+
+    <!-- Global Scripts -->
+    <script src="@assets/js/yao-agent.js"></script>
+  </body>
+</html>

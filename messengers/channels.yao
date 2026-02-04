@@ -1,0 +1,17 @@
+{
+  "default": {
+    "description": "Primary messaging channel for system notifications and user communications",
+    "email": {
+      "provider": "primary",
+      "description": "Transactional email delivery via Mailgun"
+    },
+    "sms": {
+      "provider": "unified",
+      "description": "SMS notifications via Twilio Programmable Messaging"
+    },
+    "whatsapp": {
+      "provider": "unified",
+      "description": "WhatsApp Business messaging via Twilio"
+    }
+  }
+}

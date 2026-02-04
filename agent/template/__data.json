@@ -1,0 +1,13 @@
+{
+  "title": "Yaobots",
+  "loginUrl": "/dashboard/auth/entry",
+  "slogan": {
+    "zh-CN": "让 AI 干活",
+    "en-US": "Let AI do it"
+  },
+  "description": {
+    "zh-CN": "主动帮你干活的 AI 队友。你开会，它整理报销；你思考，它准备数据；你决策，它去执行。重复的交给它，重要的留给你。",
+    "en-US": "Proactive AI teammates. You meet, they handle expenses. You think, they prep data. You decide, they execute. The routine is theirs, the important is yours."
+  },
+  "version": "1.0.0"
+}

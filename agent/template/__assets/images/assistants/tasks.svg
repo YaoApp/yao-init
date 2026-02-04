@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="taskGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="56" fill="url(#taskGrad)"/>
+  
+  <!-- Clipboard base -->
+  <rect x="32" y="28" width="56" height="68" rx="6" fill="white" opacity="0.95"/>
+  
+  <!-- Clipboard clip -->
+  <rect x="45" y="22" width="30" height="12" rx="3" fill="white"/>
+  <rect x="50" y="26" width="20" height="6" rx="2" fill="#3b82f6"/>
+  
+  <!-- Task lines with checkboxes -->
+  <!-- Task 1 - Completed (Q1) -->
+  <rect x="40" y="42" width="12" height="12" rx="2" fill="#22c55e"/>
+  <polyline points="43,48 46,51 52,45" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="56" y="45" width="26" height="6" rx="2" fill="#e5e7eb"/>
+  
+  <!-- Task 2 - Completed (Q2) -->
+  <rect x="40" y="58" width="12" height="12" rx="2" fill="#22c55e"/>
+  <polyline points="43,64 46,67 52,61" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="56" y="61" width="22" height="6" rx="2" fill="#e5e7eb"/>
+  
+  <!-- Task 3 - Pending (Q1 urgent) -->
+  <rect x="40" y="74" width="12" height="12" rx="2" fill="none" stroke="#ef4444" stroke-width="2"/>
+  <rect x="56" y="77" width="28" height="6" rx="2" fill="#fecaca"/>
+  
+  <!-- Four quadrant indicator dots -->
+  <circle cx="86" cy="34" r="4" fill="#ef4444" opacity="0.8"/>
+  <circle cx="86" cy="44" r="4" fill="#3b82f6" opacity="0.8"/>
+</svg>

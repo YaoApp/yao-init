@@ -1,0 +1,276 @@
+/**
+ * Agent SUI CSS Variables
+ * Synchronized with CUI design system
+ * Supports Light and Dark themes via data-theme attribute
+ */
+
+:root {
+  /* Primary Colors */
+  --r: 51;
+  --g: 113;
+  --b: 252;
+
+  --h: 221;
+  --s: 97.1%;
+  --l: 59.4%;
+
+  --color_main: #3371fc;
+  --color_primary: #3371fc;
+  --color_main_hover: #4580ff;
+  --color_main_active: #2861e6;
+
+  /* Text Colors */
+  --color_text: #111;
+  --color_text_grey: #999;
+  --color_text_light: #666;
+  --color_text_contrast: black;
+  --color_title: #363636;
+  --color_title_grey: #a9abac;
+
+  /* Status Colors */
+  --color_warning: #faad14;
+  --color_warning_bg: #fff7e6;
+  --color_success: #00c853;
+  --color_success_bg: #f6ffed;
+  --color_danger: #e62965;
+  --color_danger_bg: #fff1f0;
+  --color_info: #3371fc;
+  --color_info_bg: #e6f7ff;
+
+  /* UI Colors */
+  --color_placeholder: #727272;
+  --color_page_title: #363636;
+  --color_bg: #f0f0f0;
+  --color_bg_light: rgba(255, 255, 255, 0.618);
+  --color_bg_nav: #f9f9f9;
+  --color_bg_nav_tabs: #f2f2f2;
+  --color_bg_nav_hover: #efefef;
+  --color_bg_menu: #ffffff;
+  --color_bg_hover: #f5f5f5;
+  --color_bg_active: #e6e6e6;
+
+  /* Border Colors */
+  --color_border: #e6e6e6;
+  --color_border_light: rgba(0, 0, 0, 0.06);
+  --color_border_soft: rgba(0, 0, 0, 0.03);
+  --color_dot: rgba(0, 0, 0, 0.12);
+  --color_scrollbar_thumb: rgba(0, 0, 0, 0.15);
+
+  /* Shadows */
+  --shadow: 0 0 30px rgba(0, 0, 0, 0.081);
+  --shadow_float: 0 4px 20px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow_float_hover: 0 8px 28px rgba(0, 0, 0, 0.12),
+    0 2px 4px rgba(0, 0, 0, 0.05);
+
+  /* Layout */
+  --radius: 6px;
+  --fontsize: 14px;
+  --base_height: 38px;
+  --max_width: 1200px;
+  --setting_width: 720px;
+
+  /* Neo Design System Colors */
+  --color_neo_bg_content: #f8f9fa;
+  --color_neo_bg_card: #ffffff;
+  --color_neo_border_card: #e9ecef;
+  --color_neo_border_hover: #d0d7de;
+  --color_neo_bg_header: #fafbfc;
+  --color_neo_border_header: #f1f3f4;
+  --color_neo_bg_selected: #f8f9ff;
+  --color_neo_border_selected: #e1e8ff;
+  --color_neo_text_primary: #212529;
+  --color_neo_text_secondary: #6c757d;
+  --color_neo_text_tertiary: #495057;
+  --color_neo_icon_muted: #adb5bd;
+  --color_neo_bg_field: #f8f9fa;
+  --color_neo_border_field: #e9ecef;
+  --color_neo_bg_field_hover: #e9ecef;
+  --color_neo_border_field_hover: #dee2e6;
+
+  /* Chatbox Design System Colors */
+  --color_chatbox_bg_content: #ffffff;
+  --color_chatbox_bg_card: #ffffff;
+  --color_chatbox_border_card: #e9ecef;
+  --color_chatbox_border_hover: #d0d7de;
+  --color_chatbox_bg_header: #fafbfc;
+  --color_chatbox_border_header: #f1f3f4;
+  --color_chatbox_bg_selected: #f8f9ff;
+  --color_chatbox_border_selected: #e1e8ff;
+  --color_chatbox_text_primary: #212529;
+  --color_chatbox_text_secondary: #6c757d;
+  --color_chatbox_text_tertiary: #495057;
+  --color_chatbox_icon_muted: #adb5bd;
+  --color_chatbox_bg_field: #f7f8fa;
+  --color_chatbox_border_field: #e9ecef;
+  --color_chatbox_bg_field_hover: #e9ecef;
+  --color_chatbox_border_field_hover: #dee2e6;
+  --color_chatbox_border_focus: #d0d7de;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  /* Primary Colors */
+  --r: 69;
+  --g: 128;
+  --b: 255;
+
+  --h: 221;
+  --s: 100%;
+  --l: 63.5%;
+
+  --color_main: #4580ff;
+  --color_primary: #4580ff;
+  --color_main_hover: #5590ff;
+  --color_main_active: #3470ef;
+
+  /* Text Colors */
+  --color_text: #a2a5b9;
+  --color_text_grey: #aaa;
+  --color_text_light: #888;
+  --color_text_contrast: white;
+  --color_title: #aaaab3;
+  --color_title_grey: #888890;
+
+  /* Status Colors */
+  --color_warning: #faad14;
+  --color_warning_bg: rgba(250, 173, 20, 0.15);
+  --color_success: #00c853;
+  --color_success_bg: rgba(0, 200, 83, 0.15);
+  --color_danger: #e62965;
+  --color_danger_bg: rgba(230, 41, 101, 0.15);
+  --color_info: #4580ff;
+  --color_info_bg: rgba(69, 128, 255, 0.15);
+
+  /* UI Colors */
+  --color_placeholder: #727272;
+  --color_page_title: #999;
+  --color_bg: #3b3b41;
+  --color_bg_light: rgba(47, 47, 52, 0.618);
+  --color_bg_nav: #232326;
+  --color_bg_nav_tabs: #2a2a2e;
+  --color_bg_nav_hover: #121212;
+  --color_bg_menu: #2f2f34;
+  --color_bg_hover: #444449;
+  --color_bg_active: #4d4d53;
+
+  /* Border Colors */
+  --color_border: #404046;
+  --color_border_light: rgba(255, 255, 255, 0.06);
+  --color_border_soft: rgba(255, 255, 255, 0.03);
+  --color_dot: rgba(255, 255, 255, 0.12);
+  --color_scrollbar_thumb: rgba(255, 255, 255, 0.15);
+
+  /* Shadows */
+  --shadow: 0 0 30px rgba(255, 255, 255, 0.06);
+  --shadow_float: 0 4px 20px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow_float_hover: 0 8px 28px rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+
+  /* Neo Design System Colors (dark theme) */
+  --color_neo_bg_content: #1a1b1e;
+  --color_neo_bg_card: #25262b;
+  --color_neo_border_card: #373a40;
+  --color_neo_border_hover: #495057;
+  --color_neo_bg_header: #2c2d32;
+  --color_neo_border_header: #373a40;
+  --color_neo_bg_selected: #2d3038;
+  --color_neo_border_selected: #4c82f7;
+  --color_neo_text_primary: #e9ecef;
+  --color_neo_text_secondary: #adb5bd;
+  --color_neo_text_tertiary: #ced4da;
+  --color_neo_icon_muted: #6c757d;
+  --color_neo_bg_field: #2c2d32;
+  --color_neo_border_field: #373a40;
+  --color_neo_bg_field_hover: #373a40;
+  --color_neo_border_field_hover: #495057;
+
+  /* Chatbox Design System Colors (dark theme) */
+  --color_chatbox_bg_content: #181818;
+  --color_chatbox_bg_card: #242424;
+  --color_chatbox_border_card: #333333;
+  --color_chatbox_border_hover: #404040;
+  --color_chatbox_bg_header: #242424;
+  --color_chatbox_border_header: #333333;
+  --color_chatbox_bg_selected: #303030;
+  --color_chatbox_border_selected: #4c82f7;
+  --color_chatbox_text_primary: #e0e0e0;
+  --color_chatbox_text_secondary: #a0a0a0;
+  --color_chatbox_text_tertiary: #808080;
+  --color_chatbox_icon_muted: #666666;
+  --color_chatbox_bg_field: #303030;
+  --color_chatbox_border_field: #333333;
+  --color_chatbox_bg_field_hover: #3a3a3a;
+  --color_chatbox_border_field_hover: #404040;
+  --color_chatbox_border_focus: #404040;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: var(--fontsize);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: var(--fontsize);
+  line-height: 1.5;
+  color: var(--color_text);
+  background-color: var(--color_bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color_scrollbar_thumb);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color_dot);
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color_primary);
+  color: white;
+}
+
+/* Links */
+a {
+  color: var(--color_primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color_main_hover);
+}
+
+/* Focus */
+:focus-visible {
+  outline: 2px solid var(--color_primary);
+  outline-offset: 2px;
+}
+
+/* Transitions for theme switching */
+body,
+body * {
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease;
+}

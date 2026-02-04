@@ -1,0 +1,18 @@
+{
+  "label": "DeepSeek V3.2",
+  "type": "openai",
+  "options": {
+    "model": "deepseek-chat",
+    "key": "$ENV.DEEPSEEK_API_KEY",
+    "proxy": "https://api.deepseek.com/v1",
+    "capabilities": {
+      "vision": false,
+      "tool_calls": true,
+      "audio": false,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": false
+    }
+  }
+}

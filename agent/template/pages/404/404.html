@@ -1,0 +1,29 @@
+<div class="error-page error-404">
+  <div class="error-container">
+    <div class="error-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M15 9l-6 6" />
+        <path d="M9 9l6 6" />
+      </svg>
+    </div>
+    
+    <h1 class="error-code">404</h1>
+    <h2 class="error-title" s:trans>Page Not Found</h2>
+    <p class="error-message" s:trans>
+      The page you're looking for doesn't exist or has been moved.
+    </p>
+    
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary" s:trans>Go to Home</a>
+      <button class="btn" s:on-click="GoBack" s:trans>Go Back</button>
+    </div>
+    
+    <div class="error-details">
+      <p class="requested-url">
+        <span s:trans>Requested URL:</span>
+        <code id="requested-url"></code>
+      </p>
+    </div>
+  </div>
+</div>

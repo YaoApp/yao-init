@@ -1,0 +1,18 @@
+{
+  "label": "Mistral Large 3",
+  "type": "openai",
+  "options": {
+    "model": "mistral-large-2512",
+    "key": "$ENV.MISTRAL_API_KEY",
+    "proxy": "https://api.mistral.ai/v1",
+    "capabilities": {
+      "vision": false,
+      "tool_calls": true,
+      "audio": false,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": false
+    }
+  }
+}

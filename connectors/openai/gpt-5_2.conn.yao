@@ -1,0 +1,18 @@
+{
+  "label": "GPT-5.2",
+  "type": "openai",
+  "options": {
+    "model": "gpt-5.2",
+    "key": "$ENV.OPENAI_API_KEY",
+    "proxy": "https://api.openai.com/v1",
+    "capabilities": {
+      "vision": "openai",
+      "tool_calls": true,
+      "audio": true,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": true
+    }
+  }
+}

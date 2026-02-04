@@ -1,0 +1,18 @@
+{
+  "label": "Amazon Nova Premier (OpenRouter)",
+  "type": "openai",
+  "options": {
+    "model": "amazon/nova-premier-v1",
+    "key": "$ENV.OPENROUTER_API_KEY",
+    "proxy": "https://openrouter.ai/api/v1",
+    "capabilities": {
+      "vision": "openai",
+      "tool_calls": true,
+      "audio": false,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": true
+    }
+  }
+}

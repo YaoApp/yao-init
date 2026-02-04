@@ -1,0 +1,19 @@
+# Global scopes configuration
+
+# Default action for unmatched API endpoints
+default: deny # Options: deny / allow
+
+# Public endpoints (accessible without authentication)
+public:
+  - GET /user/entry
+  - GET /user/entry/captcha
+  - POST /user/entry/verify
+  - GET /user/teams/invitations/:invitation_id
+
+# Default endpoint rules (can be overridden by specific scopes)
+endpoints:
+  # Knowledge Base - Write operations require specific scopes
+  # - POST /kb/* deny
+  # - PUT /kb/* deny
+  # - DELETE /kb/* deny
+  # - GET /kb/* deny

@@ -1,0 +1,18 @@
+{
+  "label": "Llama 3.3 70B (Ollama)",
+  "type": "openai",
+  "options": {
+    "model": "llama3.3",
+    "key": "ollama",
+    "proxy": "$ENV.OLLAMA_HOST",
+    "capabilities": {
+      "vision": false,
+      "tool_calls": true,
+      "audio": false,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": false
+    }
+  }
+}

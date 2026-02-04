@@ -1,0 +1,18 @@
+{
+  "label": "Gemini 2.5 Pro",
+  "type": "openai",
+  "options": {
+    "model": "gemini-2.5-pro",
+    "key": "$ENV.GOOGLE_API_KEY",
+    "proxy": "https://generativelanguage.googleapis.com/v1beta/openai",
+    "capabilities": {
+      "vision": "openai",
+      "tool_calls": true,
+      "audio": true,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": true
+    }
+  }
+}

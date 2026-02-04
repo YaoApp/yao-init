@@ -1,0 +1,18 @@
+{
+  "label": "Llama 4 Maverick (Fireworks)",
+  "type": "openai",
+  "options": {
+    "model": "accounts/fireworks/models/llama-4-maverick-instruct-basic",
+    "key": "$ENV.FIREWORKS_API_KEY",
+    "proxy": "https://api.fireworks.ai/inference/v1",
+    "capabilities": {
+      "vision": "openai",
+      "tool_calls": true,
+      "audio": false,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": true
+    }
+  }
+}

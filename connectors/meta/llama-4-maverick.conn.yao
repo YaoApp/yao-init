@@ -1,0 +1,18 @@
+{
+  "label": "Llama 4 Maverick",
+  "type": "openai",
+  "options": {
+    "model": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+    "key": "$ENV.META_API_KEY",
+    "proxy": "https://api.llama.com/v1",
+    "capabilities": {
+      "vision": "openai",
+      "tool_calls": true,
+      "audio": false,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": true
+    }
+  }
+}

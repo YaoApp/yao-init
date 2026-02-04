@@ -1,0 +1,10 @@
+name: LLM 对话测试
+description: 用于测试 LLM 对话能力的测试助手
+chat:
+  title: LLM 对话测试
+  description: 测试基本对话和会话能力
+  prompts:
+    - 你好
+    - 你能做什么？
+    - 讲个笑话
+

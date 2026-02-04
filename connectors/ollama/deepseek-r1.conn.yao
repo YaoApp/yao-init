@@ -1,0 +1,18 @@
+{
+  "label": "DeepSeek R1 (Ollama)",
+  "type": "openai",
+  "options": {
+    "model": "deepseek-r1",
+    "key": "ollama",
+    "proxy": "$ENV.OLLAMA_HOST",
+    "capabilities": {
+      "vision": false,
+      "tool_calls": false,
+      "audio": false,
+      "reasoning": true,
+      "streaming": true,
+      "json": true,
+      "multimodal": false
+    }
+  }
+}

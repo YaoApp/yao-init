@@ -1,0 +1,18 @@
+{
+  "label": "Qwen 3 (Ollama)",
+  "type": "openai",
+  "options": {
+    "model": "qwen3",
+    "key": "ollama",
+    "proxy": "$ENV.OLLAMA_HOST",
+    "capabilities": {
+      "vision": false,
+      "tool_calls": true,
+      "audio": false,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": false
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Primary Email",
+  "description": "Mailgun transactional email service for system notifications, verification codes, and user communications",
+  "connector": "mailgun",
+  "options": {
+    "domain": "$ENV.MAILGUN_DOMAIN",
+    "api_key": "$ENV.MAILGUN_API_KEY",
+    "from": "$ENV.MAILGUN_FROM",
+    "base_url": "https://api.mailgun.net/v3"
+  }
+}

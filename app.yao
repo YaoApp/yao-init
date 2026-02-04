@@ -3,39 +3,16 @@
   "short": "Demo", // The short name of the application
   "description": "Another yao application", // The application description
   "version": "0.10.4", // The application version
-
-  "adminRoot": "admin", // The admin panel root path, default is "admin"
-
-  /**
-   * Hook: setup
-   * The setup script to be executed when the installation is completed.
-   * It's useful for setting up the initial data for the application.
-   */
-  "setup": "scripts.tests.AppSetup",
-
-  /**
-   * Hook: afterLoad
-   * new feature of the yao v0.10.4
-   * The script to be executed after the application is loaded.
-   * It's useful for dynamic loading  DSLs before the http server starts.
-   */
-  "afterLoad": "scripts.tests.AppAfterLoad",
-
-  /**
-   * Hook: afterMigrate
-   * new feature of the yao v0.10.4
-   * The script to be executed after the application is migrated.
-   * It's useful for setting up the initial data when `yao migrate` is executed
-   */
-  "afterMigrate": "scripts.tests.AppAfterMigrate",
-
+  "adminRoot": "dashboard", // The admin panel root path, default is "dashboard"
   /**
    * Specify the menu process to be used for admin panel menu.
    * The default menu process is "flows.menu". You can create your own menu process.
    * @see /flows/menu.flow.yao
    */
-  "menu": { "process": "flows.menu", "args": [] },
-
+  "menu": {
+    "process": "flows.menu",
+    "args": []
+  },
   /**
    * This is a new feature of the yao v0.10.4
    * The Http Server Root Directory Configuration ( Optional )
@@ -46,22 +23,25 @@
      * The key is the public root and the value is the real source root
      * For development mode only, It's useful for SUI backend script development
      */
-    "sourceRoots": { "/public": "/data/templates/default" },
-
+    "sourceRoots": {
+      "/public": "/data/templates/default"
+    },
     // For routing SUI web pages
     "rewrite": [
-      { "^\\/assets\\/(.*)$": "/assets/$1" }, // SUI assets
-      { "^\\/(.*)$": "/$1.sui" } // File system route
-    ]
+      {
+        "^\\/assets\\/(.*)$": "/assets/$1"
+      }, // SUI assets
+      {
+        "^\\/(.*)$": "/$1.sui"
+      }, // File system route
+    ],
   },
-
   "optional": {
     /**
      *Enable remote cache for the application. When enabled,
      * it reduces requests like Select Component options queries by caching data in the browser
      */
     "remoteCache": false,
-
     /**
      * This is a new feature of the yao v0.10.4
      * layout:
@@ -71,15 +51,18 @@
      * hide: hide the menu and sub-menu
      * showName: show the name of the menu
      */
-    "menu": { "layout": "2-columns", "showName": true },
-
+    "menu": {
+      "layout": "2-columns",
+      "showName": true
+    },
     /**
      * The AI chatbot service for the application ( Optional )
      * If not specified, the neo service will not be available in the application
      */
-    "neo": { "api": "/neo" }
+    "neo": {
+      "api": "/neo"
+    },
   },
-
   /**
    * This is a new feature of the yao v0.10.4
    * The Moapi service configuration ( Optional )
@@ -90,7 +73,9 @@
    */
   "moapi": {
     "channel": "global",
-    "mirrors": ["https://api.moapi.ai"],
-    "secret": "$ENV.MOAPI_SECRET" // SUPPORT ENVIRONMENT VARIABLE
-  }
+    "mirrors": [
+      "https://api.moapi.ai"
+    ],
+    "secret": "$ENV.MOAPI_SECRET", // SUPPORT ENVIRONMENT VARIABLE
+  },
 }

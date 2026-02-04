@@ -1,0 +1,18 @@
+{
+  "label": "Claude Opus 4.5 (OpenRouter)",
+  "type": "openai",
+  "options": {
+    "model": "anthropic/claude-opus-4-5",
+    "key": "$ENV.OPENROUTER_API_KEY",
+    "proxy": "https://openrouter.ai/api/v1",
+    "capabilities": {
+      "vision": "claude",
+      "tool_calls": true,
+      "audio": false,
+      "reasoning": false,
+      "streaming": true,
+      "json": true,
+      "multimodal": true
+    }
+  }
+}
