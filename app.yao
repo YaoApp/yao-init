@@ -4,15 +4,13 @@
   "description": "Another yao application", // The application description
   "version": "0.10.4", // The application version
   "adminRoot": "dashboard", // The admin panel root path, default is "dashboard"
+
   /**
    * Specify the menu process to be used for admin panel menu.
-   * The default menu process is "flows.menu". You can create your own menu process.
-   * @see /flows/menu.flow.yao
+   * @see /scripts/menu.ts
    */
-  "menu": {
-    "process": "flows.menu",
-    "args": []
-  },
+  "menu": { "process": "scripts.menu.Get", "args": [] },
+
   /**
    * This is a new feature of the yao v0.10.4
    * The Http Server Root Directory Configuration ( Optional )
@@ -24,16 +22,12 @@
      * For development mode only, It's useful for SUI backend script development
      */
     "sourceRoots": {
-      "/public": "/data/templates/default"
+      "/public": "/data/templates/default",
     },
     // For routing SUI web pages
     "rewrite": [
-      {
-        "^\\/assets\\/(.*)$": "/assets/$1"
-      }, // SUI assets
-      {
-        "^\\/(.*)$": "/$1.sui"
-      }, // File system route
+      { "^\\/assets\\/(.*)$": "/assets/$1" }, // SUI assets
+      { "^\\/(.*)$": "/$1.sui" }, // File system route
     ],
   },
   "optional": {
@@ -53,14 +47,14 @@
      */
     "menu": {
       "layout": "2-columns",
-      "showName": true
+      "showName": true,
     },
     /**
      * The AI chatbot service for the application ( Optional )
      * If not specified, the neo service will not be available in the application
      */
     "neo": {
-      "api": "/neo"
+      "api": "/neo",
     },
   },
   /**
@@ -73,9 +67,7 @@
    */
   "moapi": {
     "channel": "global",
-    "mirrors": [
-      "https://api.moapi.ai"
-    ],
+    "mirrors": ["https://api.moapi.ai"],
     "secret": "$ENV.MOAPI_SECRET", // SUPPORT ENVIRONMENT VARIABLE
   },
 }

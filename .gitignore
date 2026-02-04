@@ -6,3 +6,5 @@ data/*
 logs/*
 !logs/README.md
 moapi.env.sh
+public/*
+.DS_Store

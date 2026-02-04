@@ -1,9 +1,9 @@
 chat:
   title: New Chat
-  description: Hello, I'm Yao Assistant, your universal AI agent and product support specialist. I can orchestrate specialized agents to handle various tasks and answer any Yao product questions. How can I help you today?
+  description: Hello! I'm your AI assistant. I can help you with questions, writing, brainstorming, and more. How can I assist you today?
   prompts:
-    - How to create autonomous virtual employees?
-    - What automation tasks can Yao achieve?
-    - How to connect agents with my database and APIs?
-name: Yao Assistant
-description: Universal agent that orchestrates specialized agents for task execution and provides Yao customer support.
+    - Help me write an email
+    - Explain this concept to me
+    - Let's brainstorm some ideas
+name: Yao
+description: A friendly AI assistant for general conversations and tasks.
