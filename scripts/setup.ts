@@ -16,6 +16,10 @@ function Init(force: boolean = false) {
 
   log.Info("=== Starting Application Init ===");
 
+  // Run migrate first to ensure tables exist
+  log.Info("Running database migration...");
+  MigrateModels();
+
   // Import seed data (skip duplicates)
   SetupRoles();
   SetupTypes();
@@ -269,27 +273,37 @@ function ResetInvitationCodes() {
 // ============================================
 
 /**
- * Generate a 12-digit numeric user_id
+ * Generate a 12-digit numeric ID
  */
-function generateUserId(): string {
+function generateId(): string {
   const timestamp = Date.now().toString().slice(-8);
   const random = Math.floor(Math.random() * 10000).toString().padStart(4, "0");
   return timestamp + random;
 }
 
-const ROOT_USER_PASSWORD = "YaoAgents.com";
+const ROOT_USER_PASSWORD = "Yao123++";
 
 const ROOT_USER = {
   email: "root@yaoagents.com",
-  name: "Root",
+  name: "Administrator",
   status: "active",
   role_id: "system:root",
   type: "selfhosting",
   locale: "en-us",
 };
 
+const ROOT_TEAM = {
+  name: "Default",
+  display_name: "Default Team",
+  description: "Default team",
+  status: "active",
+  type: "other",
+  is_verified: true,
+  role_id: "system:root", // Team role (same as root user)
+};
+
 /**
- * Setup root user - Create root user if not exists
+ * Setup root user with team - Create root user, team and membership if not exists
  * yao run scripts.setup.SetupRootUser
  */
 function SetupRootUser() {
@@ -306,37 +320,121 @@ function SetupRootUser() {
     return;
   }
 
+  // Generate IDs
+  const userId = generateId();
+  const teamId = generateId();
+  const memberId = generateId();
+
   // Create root user with generated user_id
   // password_hash field has "crypt": "PASSWORD", model layer auto-hashes with bcrypt
-  const userData = { 
-    ...ROOT_USER, 
-    user_id: generateUserId(),
+  const userData = {
+    ...ROOT_USER,
+    user_id: userId,
     password_hash: ROOT_USER_PASSWORD,
   };
-  const userId = Process("models.__yao.user.Save", userData);
-  log.Info(`Root user created: ${ROOT_USER.email} (ID: ${userId}, user_id: ${userData.user_id})`);
+  const userPK = Process("models.__yao.user.Save", userData);
+  log.Info(`Root user created: ${ROOT_USER.email} (ID: ${userPK}, user_id: ${userId})`);
+
+  // Create root team
+  const teamData = {
+    ...ROOT_TEAM,
+    team_id: teamId,
+    owner_id: userId,
+    contact_email: ROOT_USER.email,
+  };
+  const teamPK = Process("models.__yao.team.Save", teamData);
+  log.Info(`Root team created: ${ROOT_TEAM.name} (ID: ${teamPK}, team_id: ${teamId})`);
+
+  // Add root user as team owner member
+  const memberData = {
+    member_id: memberId,
+    team_id: teamId,
+    user_id: userId,
+    member_type: "user",
+    display_name: ROOT_USER.name,
+    email: ROOT_USER.email,
+    role_id: "team:owner",
+    is_owner: true,
+    status: "active",
+    joined_at: new Date().toISOString(),
+  };
+  const memberPK = Process("models.__yao.member.Save", memberData);
+  log.Info(`Root user added to team as owner (ID: ${memberPK}, member_id: ${memberId})`);
 }
 
 /**
- * Reset root user - Delete and recreate root user
+ * Reset root user - Delete and recreate root user, team and membership
  * yao run scripts.setup.ResetRootUser
  */
 function ResetRootUser() {
   log.Info("Resetting root user...");
 
+  // Get existing root user to find user_id for cleanup
+  const existingUser = Process("models.__yao.user.Get", {
+    wheres: [{ column: "email", value: ROOT_USER.email }],
+    limit: 1,
+  });
+
+  if (existingUser && existingUser.length > 0) {
+    const oldUserId = existingUser[0].user_id;
+
+    // Delete member records for this user
+    const deletedMembers = Process("models.__yao.member.DestroyWhere", {
+      wheres: [{ column: "user_id", value: oldUserId }],
+    });
+    log.Info(`Deleted ${deletedMembers} member record(s)`);
+
+    // Delete teams owned by this user
+    const deletedTeams = Process("models.__yao.team.DestroyWhere", {
+      wheres: [{ column: "owner_id", value: oldUserId }],
+    });
+    log.Info(`Deleted ${deletedTeams} team(s)`);
+  }
+
   // Delete existing root user
-  const deleted = Process("models.__yao.user.DestroyWhere", {
+  const deletedUsers = Process("models.__yao.user.DestroyWhere", {
     wheres: [{ column: "email", value: ROOT_USER.email }],
   });
-  log.Info(`Deleted ${deleted} root user(s)`);
+  log.Info(`Deleted ${deletedUsers} root user(s)`);
+
+  // Generate new IDs
+  const userId = generateId();
+  const teamId = generateId();
+  const memberId = generateId();
 
   // Create new root user with generated user_id
   // password_hash field has "crypt": "PASSWORD", model layer auto-hashes with bcrypt
-  const userData = { 
-    ...ROOT_USER, 
-    user_id: generateUserId(),
+  const userData = {
+    ...ROOT_USER,
+    user_id: userId,
     password_hash: ROOT_USER_PASSWORD,
   };
-  const userId = Process("models.__yao.user.Save", userData);
-  log.Info(`Root user created: ${ROOT_USER.email} (ID: ${userId}, user_id: ${userData.user_id})`);
+  const userPK = Process("models.__yao.user.Save", userData);
+  log.Info(`Root user created: ${ROOT_USER.email} (ID: ${userPK}, user_id: ${userId})`);
+
+  // Create root team
+  const teamData = {
+    ...ROOT_TEAM,
+    team_id: teamId,
+    owner_id: userId,
+    contact_email: ROOT_USER.email,
+  };
+  const teamPK = Process("models.__yao.team.Save", teamData);
+  log.Info(`Root team created: ${ROOT_TEAM.name} (ID: ${teamPK}, team_id: ${teamId})`);
+
+  // Add root user as team owner member
+  const memberData = {
+    member_id: memberId,
+    team_id: teamId,
+    user_id: userId,
+    member_type: "user",
+    display_name: ROOT_USER.name,
+    email: ROOT_USER.email,
+    role_id: "team:owner",
+    is_owner: true,
+    status: "active",
+    joined_at: new Date().toISOString(),
+  };
+  const memberPK = Process("models.__yao.member.Save", memberData);
+  log.Info(`Root user added to team as owner (ID: ${memberPK}, member_id: ${memberId})`);
 }

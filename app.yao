@@ -36,38 +36,17 @@
      * it reduces requests like Select Component options queries by caching data in the browser
      */
     "remoteCache": false,
+
     /**
-     * This is a new feature of the yao v0.10.4
-     * layout:
-     * 	  1-column: one column for menu and sub-menu
-     * 	  2-columns: menu and sub-menu in two column
-     *
-     * hide: hide the menu and sub-menu
-     * showName: show the name of the menu
+     * The Layout options:
+     * Chat: Chat session layout (default)
+     * Admin: Admin dashboard layout (default)
      */
-    "menu": {
-      "layout": "2-columns",
-      "showName": true,
-    },
+    "layout": "Chat",
+
     /**
-     * The AI chatbot service for the application ( Optional )
-     * If not specified, the neo service will not be available in the application
+     * Avatar service for the application ( Optional )
      */
-    "neo": {
-      "api": "/neo",
-    },
-  },
-  /**
-   * This is a new feature of the yao v0.10.4
-   * The Moapi service configuration ( Optional )
-   * The Moapi service is not necessary for the application to run.
-   *
-   * Get your secret key from Moapi or use an AI Connector to integrate AI.
-   * @see https://moapi.ai for more information
-   */
-  "moapi": {
-    "channel": "global",
-    "mirrors": ["https://api.moapi.ai"],
-    "secret": "$ENV.MOAPI_SECRET", // SUPPORT ENVIRONMENT VARIABLE
+    "avatar": { "uploader": "__yao.attachment", "agent": "common.avatar" },
   },
 }
