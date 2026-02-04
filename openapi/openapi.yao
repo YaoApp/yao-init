@@ -57,6 +57,7 @@
       "ip_blacklist": [], // Optional: IP addresses blocked from access (default: empty)
       "require_https": true, // Optional: Require HTTPS for all endpoints (default: true)
       "disable_unsecure_endpoints": false, // Optional: Disable non-HTTPS endpoints (default: false)
+      "secure_cookie": false, // Optional: Use __Host- prefix and Secure flag for cookies (default: true). Set to false for HTTP dev environments with non-localhost IPs like 192.168.x.x
     },
     "client": {
       "default_client_type": "confidential", // Optional: Default client type - confidential/public (default: confidential)
