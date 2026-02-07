@@ -15,4 +15,5 @@ user:profile:write:own:
   description: "Update own profile"
   endpoints:
     - PUT /user/profile
+    - PUT /user/account/password
 
