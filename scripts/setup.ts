@@ -296,9 +296,9 @@ const ROOT_USER = {
 };
 
 const ROOT_TEAM = {
-  name: "Default",
-  display_name: "Default Team",
-  description: "Default team",
+  name: "Administrator's Team",
+  display_name: "Administrator's Team",
+  description: "Default team for root user",
   status: "active",
   type: "other",
   is_verified: true,
