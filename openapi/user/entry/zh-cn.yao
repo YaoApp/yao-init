@@ -1,6 +1,6 @@
 // 统一认证入口配置（登录+注册）
 {
-  "title": "欢迎使用 Yao Agents",
+  "title": "欢迎使用 My Application",
   "description": "请输入邮箱以继续",
   "success_url": "$ENV.AFTER_LOGIN_SUCCESS_URL", // 登录/注册成功后跳转
   "failure_url": "$ENV.AFTER_LOGIN_FAILURE_URL", // 认证失败跳转

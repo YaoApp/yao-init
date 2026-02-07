@@ -43,6 +43,7 @@ client:free:
   - chat:all
   - messenger:all
   - trace:all
+  - sandbox:all
   - __yao:all
   - api:all
 
@@ -59,6 +60,7 @@ client:pro:
   - mcp:all
   - messenger:all
   - trace:all
+  - sandbox:all
   - __yao:all
   - api:all
 
@@ -75,6 +77,7 @@ client:ent:
   - mcp:all
   - messenger:all
   - trace:all
+  - sandbox:all
   - __yao:all
   - api:all
 
@@ -102,6 +105,7 @@ user:free:
   - mcp:all:own
   - messenger:all:own
   - trace:all:own
+  - sandbox:all:own
   - __yao:all:own
   - api:all:own
 
@@ -118,6 +122,7 @@ user:pro:
   - mcp:all:own
   - messenger:all:own
   - trace:all:own
+  - sandbox:all:own
   - __yao:all:own
   - api:all:own
 
@@ -134,6 +139,7 @@ user:ent:
   - mcp:all:own
   - messenger:all:own
   - trace:all:own
+  - sandbox:all:own
   - __yao:all:own
   - api:all:own
 
@@ -158,6 +164,7 @@ team:owner:
   - mcp:all:team
   - messenger:all:team
   - trace:all:team
+  - sandbox:all:team
   - __yao:all:team
   - api:all:team
 
@@ -174,6 +181,7 @@ team:admin:
   - mcp:manage:team
   - messenger:all:team
   - trace:read:team
+  - sandbox:all:team
   - __yao:all:team
   - api:all:team
 
@@ -203,6 +211,7 @@ team:member:
   - messenger:write:own
   - trace:read:team
   - trace:read:own
+  - sandbox:read:own
   - __yao:all:team
   - api:all:own
 
@@ -784,3 +793,20 @@ api:all:own:
 
 api:all:team:
   - api:api:execute:team
+
+# ============ Sandbox Resources Aliases ============
+
+sandbox:all:
+  - sandbox:vnc:read:all
+
+sandbox:all:own:
+  - sandbox:vnc:read:own
+
+sandbox:all:team:
+  - sandbox:vnc:read:team
+
+sandbox:read:team:
+  - sandbox:vnc:read:team
+
+sandbox:read:own:
+  - sandbox:vnc:read:own

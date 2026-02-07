@@ -1,6 +1,6 @@
 // Unified auth entry config (login + register)
 {
-  "title": "Welcome to Yao Agents",
+  "title": "Welcome to My Application",
   "description": "Enter your email to continue",
   "default": true,
   "success_url": "$ENV.AFTER_LOGIN_SUCCESS_URL", // Redirect after successful login/register

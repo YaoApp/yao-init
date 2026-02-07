@@ -1,3 +1,4 @@
 {
-  "$yao": "utils.app.Ping"
+  "$yao": "utils.app.Ping",
+  "$env": "@GetEnv"
 }

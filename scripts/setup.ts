@@ -29,6 +29,9 @@ function Init(force: boolean = false) {
   // Create root user if not exists
   SetupRootUser();
 
+  // Build SUI templates
+  BuildSUI();
+
   log.Info("=== Application Init Completed ===");
   console.log("");
   console.log("========================================");
@@ -360,6 +363,27 @@ function SetupRootUser() {
   };
   const memberPK = Process("models.__yao.member.Save", memberData);
   log.Info(`Root user added to team as owner (ID: ${memberPK}, member_id: ${memberId})`);
+}
+
+// ============================================
+// SUI Build
+// ============================================
+
+/**
+ * Build SUI templates
+ * yao run scripts.setup.BuildSUI
+ */
+function BuildSUI() {
+  log.Info("Building SUI templates...");
+  try {
+    const warnings = Process("sui.build.all", "web", "default", { ssr: true });
+    if (warnings && warnings.length > 0) {
+      log.Warn(`SUI build warnings: ${JSON.stringify(warnings)}`);
+    }
+    log.Info("SUI templates built successfully");
+  } catch (e) {
+    log.Warn(`SUI build failed: ${e} (templates will be built on first access)`);
+  }
 }
 
 /**

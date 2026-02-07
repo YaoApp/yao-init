@@ -1,9 +1,16 @@
 {
-  "name": "Demo Application", // The name of the application
-  "short": "Demo", // The short name of the application
-  "description": "Another yao application", // The application description
-  "version": "0.10.4", // The application version
+  "name": "My Application", // The name of the application
+  "short": "MyApp", // The short name of the application
+  "description": "An application built with Yao App Engine", // The application description
+  "version": "1.0.0", // The application version
   "adminRoot": "dashboard", // The admin panel root path, default is "dashboard"
+
+  /**
+   * Setup hook - runs automatically on `yao init` or first `yao start`.
+   * Executes after database migration. Seeds roles, types, menus, and creates root user.
+   * @see /scripts/setup.ts
+   */
+  "setup": "scripts.setup.Init",
 
   /**
    * Specify the menu process to be used for admin panel menu.
