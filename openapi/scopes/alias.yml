@@ -267,6 +267,7 @@ user:all:own:
 
 # Full user API access with "team" data scope
 user:all:team:
+  - user:entry:write:own
   - user:profile:read:own
   - user:profile:write:own
   - user:teams:read:public
@@ -287,6 +288,7 @@ user:all:team:
 
 # User management permissions for team admins (no delete team)
 user:manage:team:
+  - user:entry:write:own
   - user:profile:read:own
   - user:profile:write:own
   - user:teams:read:public
@@ -306,6 +308,7 @@ user:manage:team:
 
 # User read-only access for team members
 user:read:team:
+  - user:entry:write:own
   - user:profile:read:own
   - user:teams:read:public
   - user:teams:read:config
