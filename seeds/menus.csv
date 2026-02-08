@@ -1,5 +1,5 @@
 menu_id,parent,name,description,icon,path,type,sort,status,public,share
-items_chat,,"{""en"":""Chat"",""zh-cn"":""聊天对话""}","{""en"":""Chat with AI assistants"",""zh-cn"":""与AI助手对话""}","{""name"":""material-sms"",""size"":22}",/chat,items,100,enabled,1,team
+items_mission_control,,"{""en"":""Mission Control"",""zh-cn"":""任务中心""}","{""en"":""Manage missions and agents"",""zh-cn"":""管理任务和智能体""}","{""name"":""material-rocket_launch"",""size"":22}",/mission-control,items,100,enabled,1,team
 items_assistants,,"{""en"":""AI Assistants"",""zh-cn"":""AI 助手""}","{""en"":""Manage AI assistants"",""zh-cn"":""管理AI助手""}","{""name"":""material-assistant"",""size"":22}",/assistants,items,110,enabled,1,team
-items_mission_control,,"{""en"":""Mission Control"",""zh-cn"":""任务中心""}","{""en"":""Manage missions and agents"",""zh-cn"":""管理任务和智能体""}","{""name"":""material-rocket_launch"",""size"":22}",/mission-control,items,115,enabled,1,team
+items_chat,,"{""en"":""Chat"",""zh-cn"":""聊天对话""}","{""en"":""Chat with AI assistants"",""zh-cn"":""与AI助手对话""}","{""name"":""material-sms"",""size"":22}",/chat,items,120,enabled,1,team
 setting_profile,,"{""en"":""Settings"",""zh-cn"":""设置""}","{""en"":""Personal profile settings"",""zh-cn"":""个人资料设置""}","{""name"":""material-tune"",""size"":22}",/settings/profile,setting,900,enabled,1,team
