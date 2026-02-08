@@ -1,8 +1,8 @@
 {
-  "label": "Qwen 2.5 Coder (Ollama)",
+  "label": "Qwen 2.5 Coder 0.5B(Ollama)",
   "type": "openai",
   "options": {
-    "model": "qwen2.5-coder",
+    "model": "qwen2.5-coder:0.5b",
     "key": "ollama",
     "proxy": "$ENV.OLLAMA_HOST",
     "capabilities": {
