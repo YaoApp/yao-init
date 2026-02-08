@@ -3,7 +3,7 @@
     "description": "Primary messaging channel for system notifications and user communications",
     "email": {
       "provider": "primary",
-      "description": "Transactional email delivery via Mailgun"
+      "description": "Transactional email delivery via Gmail SMTP"
     },
     "sms": {
       "provider": "unified",

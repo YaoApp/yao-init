@@ -1,0 +1,16 @@
+{
+  "name": "Primary Email",
+  "description": "SMTP email service (Gmail example) for system notifications, verification codes, and user communications",
+  "connector": "smtp",
+  "options": {
+    "smtp": {
+      "host": "$ENV.SMTP_HOST",
+      "port": "$ENV.SMTP_PORT",
+      "username": "$ENV.SMTP_USERNAME",
+      "password": "$ENV.SMTP_PASSWORD",
+      "from": "$ENV.SMTP_FROM",
+      "use_ssl": true,
+      "use_tls": false
+    }
+  }
+}
