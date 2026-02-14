@@ -446,6 +446,72 @@ function Next(ctx: agent.Context, payload: agent.Payload): agent.Next {
 
 ---
 
+## Pattern: A2A Sub-Agent Call in Hook
+
+Call a specialized agent from within a hook and use the result.
+
+```typescript
+function Create(ctx: agent.Context, messages: agent.Message[]): agent.Create {
+  const lastMsg = messages[messages.length - 1];
+  const content = typeof lastMsg?.content === "string" ? lastMsg.content : "";
+
+  // Call classifier sub-agent
+  const result = ctx.agent.Call("yao.keeper.classify", [
+    { role: "user", content: `Classify: ${content}` },
+  ], {
+    skip: { output: true, history: true },
+  });
+
+  if (result.error) {
+    console.error("Classification failed:", result.error);
+    return { messages };
+  }
+
+  // Parse structured result
+  const data = Process("text.ExtractJSON", result.content);
+  if (data && data.category) {
+    ctx.memory.context.Set("classification", data);
+  }
+
+  return { messages };
+}
+```
+
+---
+
+## Pattern: A2A in Async Context (YaoJob)
+
+For background tasks without agent.Context, use `Process("agent.Call")`.
+
+```typescript
+// In a Job handler — no ctx available
+function JobClassifyEntry(entryId: string, content: string) {
+  const result = Process("agent.Call", {
+    assistant_id: "yao.keeper.classify",
+    messages: [{ role: "user", content: `Classify: ${content}` }],
+    timeout: 60,
+  });
+
+  if (result.error) {
+    console.error("A2A failed:", result.error);
+    return;
+  }
+
+  const data = Process("text.ExtractJSON", result.content);
+  if (data && data.category) {
+    Process("models.agents.yao.keeper.entry.Update", entryId, {
+      category_id: resolveCategoryId(data.category),
+      tags: data.tags || [],
+      summary: data.summary || "",
+    });
+  }
+}
+```
+
+**Key difference:** `ctx.agent.Call()` inherits the parent agent's context (auth, chat_id, locale). `Process("agent.Call")` creates a headless context with auto-injected auth and forced `skip.output`/`skip.history`.
+
+---
+
 ## Best Practices
 
 1. **Always handle errors** - Check `payload.error` and tool errors
@@ -456,3 +522,5 @@ function Next(ctx: agent.Context, payload: agent.Payload): agent.Next {
 6. **Handle locale** - Support multiple languages in messages
 7. **Log for debugging** - Use `ctx.trace` for visibility
 8. **Keep hooks focused** - Delegate complex logic to tools/agents
+9. **Use `text.ExtractJSON`** - For parsing LLM structured output, not manual regex
+10. **Choose correct A2A method** - `ctx.agent.Call()` in hooks, `Process("agent.Call")` elsewhere

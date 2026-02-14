@@ -58,6 +58,51 @@ export type MigrateOption = {
 };
 
 /**
+ * The authorization information returned by the `Authorized()` global function.
+ * Contains the current user's team and identity context.
+ */
+export type AuthorizedInfo = {
+  /**
+   * Organization/team identifier for data isolation.
+   */
+  team_id: string;
+
+  /**
+   * Current user identifier.
+   */
+  user_id: string;
+
+  /**
+   * Permission scopes granted to this session.
+   */
+  scopes: string[];
+
+  /**
+   * Additional fields may be present.
+   */
+  [key: string]: any;
+};
+
+/**
+ * Returns the current user's authorization context, including team identity
+ * and permission scopes.
+ *
+ * Available in any Yao V8 script (Process Handlers, MCP Adapters, etc.).
+ *
+ * @returns The authorization information for the current session.
+ * @throws If there is no authentication context (e.g. automated scripts without a user session).
+ *
+ * @example
+ * ```typescript
+ * const auth = Authorized();
+ * // auth.team_id   — current team identifier (e.g. "team-001")
+ * // auth.user_id   — current user identifier
+ * // auth.scopes    — permission scopes array
+ * ```
+ */
+export declare function Authorized(): AuthorizedInfo;
+
+/**
  * Represents a dataset with pagination information.
  * This type is commonly used for paginated data retrieval,
  * such as search results or lists with multiple pages.

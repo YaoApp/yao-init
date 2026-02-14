@@ -175,7 +175,7 @@ export interface Table {
  */
 export interface QueryDSL {
   /** List of fields to select */
-  select: (Expression | string)[];
+  select?: (Expression | string)[];
   /** Main table or model to select from */
   from?: Table | string;
   /** A list of where clauses */

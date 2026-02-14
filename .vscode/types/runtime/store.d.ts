@@ -1,4 +1,3 @@
-
 /**
  * Represents a map of options for store configuration.
  */
@@ -90,4 +89,123 @@ export declare class Store {
    * Clears all items in the store.
    */
   Clear(): void;
+
+  /**
+   * Sets multiple key-value pairs at once.
+   * @param values - Object containing key-value pairs to set
+   * @param ttl - Time to live in seconds
+   */
+  SetMulti(values: { [key: string]: any }, ttl?: number): void;
+
+  /**
+   * Gets multiple values from the store.
+   * @param keys - Array of keys to retrieve
+   * @returns Object containing key-value pairs for existing keys
+   */
+  GetMulti(keys: string[]): { [key: string]: any };
+
+  /**
+   * Deletes multiple keys from the store.
+   * @param keys - Array of keys to delete
+   */
+  DelMulti(keys: string[]): void;
+
+  /**
+   * Gets multiple values from the store, or sets them using the provided function if not found.
+   * @param keys - Array of keys to retrieve
+   * @param getValue - Function to get the value if not found
+   * @param ttl - Time to live in seconds
+   * @returns Object containing key-value pairs
+   */
+  GetSetMulti(
+    keys: string[],
+    getValue: (key: string) => any,
+    ttl?: number
+  ): { [key: string]: any };
+
+  // List Operations
+
+  /**
+   * Add elements to the end of a list.
+   * @param key - The key for the list
+   * @param values - Values to add to the list
+   */
+  Push(key: string, ...values: any[]): void;
+
+  /**
+   * Remove and return an element from a list.
+   * @param key - The key for the list
+   * @param position - Position to pop from (1 = end, -1 = beginning)
+   * @returns The removed element
+   */
+  Pop(key: string, position: number): any;
+
+  /**
+   * Remove all occurrences of a specific value from a list.
+   * @param key - The key for the list
+   * @param value - The value to remove
+   */
+  Pull(key: string, value: any): void;
+
+  /**
+   * Remove all occurrences of multiple values from a list.
+   * @param key - The key for the list
+   * @param values - Values to remove from the list
+   */
+  PullAll(key: string, ...values: any[]): void;
+
+  /**
+   * Add elements to a list only if they don't already exist (ensures uniqueness).
+   * @param key - The key for the list
+   * @param values - Values to add to the list (duplicates ignored)
+   */
+  AddToSet(key: string, ...values: any[]): void;
+
+  /**
+   * Get the length of a list.
+   * @param key - The key for the list
+   * @returns The number of elements in the list
+   */
+  ArrayLen(key: string): number;
+
+  /**
+   * Get an element at a specific index in a list.
+   * @param key - The key for the list
+   * @param index - Zero-based index of the element
+   * @returns The element at the specified index
+   */
+  ArrayGet(key: string, index: number): any;
+
+  /**
+   * Set an element at a specific index in a list.
+   * @param key - The key for the list
+   * @param index - Zero-based index of the element
+   * @param value - New value to set at the specified index
+   */
+  ArraySet(key: string, index: number, value: any): void;
+
+  /**
+   * Get a slice of elements from a list with skip and limit.
+   * @param key - The key for the list
+   * @param skip - Number of elements to skip from the beginning
+   * @param limit - Maximum number of elements to return
+   * @returns Array of elements in the specified range
+   */
+  ArraySlice(key: string, skip: number, limit: number): any[];
+
+  /**
+   * Get a specific page of elements from a list.
+   * @param key - The key for the list
+   * @param page - Page number (starting from 1)
+   * @param pageSize - Number of items per page
+   * @returns Array of elements for the specified page
+   */
+  ArrayPage(key: string, page: number, pageSize: number): any[];
+
+  /**
+   * Get all elements in a list.
+   * @param key - The key for the list
+   * @returns Array containing all elements in the list
+   */
+  ArrayAll(key: string): any[];
 }

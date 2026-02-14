@@ -283,6 +283,10 @@ const results = ctx.mcp.All([
 
 ## Agent API (A2A)
 
+Yao supports two mechanisms for agent-to-agent calls depending on execution context.
+
+### Method 1: `ctx.agent.*` — From Agent Hooks (has agent.Context)
+
 ```typescript
 interface Agent {
   Call(agentID: string, messages: Message[], opts?: AgentOptions): AgentResult;
@@ -314,12 +318,13 @@ interface AgentRequest {
 
 ```typescript
 // Call single agent
-const result = ctx.agent.Call("specialist", messages, {
-  onChunk: (msg) => {
-    console.log("Chunk:", msg);
-    return 0;
-  },
+const result = ctx.agent.Call("yao.keeper.classify", messages, {
+  skip: { output: true, history: true },
+  metadata: { source: "keeper" },
 });
+// result.content  — LLM text response
+// result.response — full Response object
+// result.error    — error string if failed
 
 // Parallel calls
 const results = ctx.agent.All([
@@ -332,6 +337,68 @@ const results = ctx.agent.All([
   },
 });
 ```
+
+### Method 2: `Process("agent.Call")` — From Any Context (No agent.Context)
+
+For YaoJob async tasks, Process Handlers, MCP Adapters, scheduled scripts, or any context without `agent.Context`.
+
+```typescript
+const result = Process("agent.Call", {
+  assistant_id: "yao.keeper.classify",    // Required: target assistant ID
+  messages: [                              // Required: OpenAI format
+    { role: "user", content: "Classify this content..." },
+  ],
+  model: "deepseek.v3",                   // Optional: connector ID override
+  timeout: 120,                            // Optional: seconds (default: 600)
+  metadata: { source: "job" },             // Optional: passed to hooks
+  locale: "zh-CN",                         // Optional
+  chat_id: "custom-id",                    // Optional: auto-generated if empty
+  route: "/test",                          // Optional
+});
+```
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `assistant_id` | string | Yes | Target assistant ID (fully qualified, e.g. `yao.keeper.classify`) |
+| `messages` | array | Yes | Message list (`[{role, content}]`) |
+| `model` | string | No | Connector ID override (e.g. `deepseek.v3`) |
+| `timeout` | int | No | Timeout in seconds. Default: **600** (10 min) |
+| `skip` | object | No | Skip config. `output` and `history` are **always forced true** |
+| `metadata` | object | No | Custom metadata passed to agent hooks |
+| `locale` | string | No | Locale string |
+| `chat_id` | string | No | Chat session ID. Auto-generated if empty |
+
+**Return Value (both methods):**
+
+```typescript
+interface AgentResult {
+  agent_id: string;          // Target assistant ID
+  content: string;           // Extracted text from LLM completion
+  response?: Response;       // Full Response (completion, next hook data, etc.)
+  error?: string;            // Error message if failed (empty on success)
+}
+```
+
+**Key behaviors of `Process("agent.Call")`:**
+
+- **Headless context** — creates agent.Context without HTTP (no Writer, no Interrupt)
+- **Forced skip** — `skip.output` and `skip.history` always `true`
+- **Auth auto-injection** — `team_id`, `user_id` obtained from process execution context
+- **Timeout management** — self-managed via `context.WithTimeout`; effective timeout = `min(caller_timeout, agent_call_timeout)`
+- **Error handling** — agent/LLM errors in `result.error` (not thrown); validation errors throw immediately
+
+**When to use which:**
+
+| Scenario | Method |
+|----------|--------|
+| Inside Create/Next hooks | `ctx.agent.Call()` |
+| YaoJob async tasks | `Process("agent.Call")` |
+| MCP Adapter implementations | `Process("agent.Call")` |
+| Process Handlers / scripts | `Process("agent.Call")` |
+| Need streaming chunks | `ctx.agent.Call()` with `onChunk` |
+| Need parallel A2A | `ctx.agent.All()` |
 
 ## LLM API
 

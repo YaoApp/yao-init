@@ -1,6 +1,9 @@
 ---
 name: yao-agent-development
 description: Guide for building AI Agents with Yao framework. Use when creating assistants, implementing hooks (Create/Next), defining MCP tools, database models, prompts, i18n, agent-to-agent communication (A2A), or working with the Context API. Trigger when user mentions Yao Agent, assistant development, hooks, MCP tools, or agent pipelines.
+metadata:
+  author: Yao App Engine
+  version: "1.0"
 ---
 
 # Yao Agent Development Guide
@@ -78,12 +81,23 @@ assistants/<assistant_id>/
 
 | Field               | Description                               |
 | ------------------- | ----------------------------------------- |
-| `connector`         | Default LLM connector ID                  |
-| `connector_options` | Fallback connectors and filters           |
+| `connector`         | Default LLM connector ID. Supports `$ENV.VAR` syntax |
+| `connector_options` | Connector filtering for CUI switcher (see below) |
 | `mcp.servers`       | MCP tools to enable                       |
-| `uses.search`       | Search behavior: `"disabled"`, `"<agent>"`|
+| `uses.search`       | Search behavior: `"disabled"`, `"builtin"`, `"<agent>"` |
 | `modes`             | Supported modes: `"chat"`, `"task"`       |
 | `share`             | Sharing: `"user"`, `"team"`, `"public"`   |
+| `tags`              | Classification tags for CUI display       |
+| `mentionable`       | Whether agent can be @mentioned by others |
+| `sort`              | Display order in CUI sidebar              |
+
+**`connector_options` details:**
+
+| Field | Description |
+|-------|-------------|
+| `optional` | Show connector switcher in CUI (`true`=show, `false`=hide) |
+| `connectors` | Whitelist of connectors; empty = show all |
+| `filters` | Filter by capability: `"tool_calls"`, `"vision"`, `"reasoning"`, etc. |
 
 ---
 
@@ -100,33 +114,20 @@ User Input → Load History → Create Hook → LLM Call → Tool Execution → 
 Called before LLM call. Configure the request.
 
 ```typescript
-import { agent } from "@yao/runtime";
-
 function Create(ctx: agent.Context, messages: agent.Message[]): agent.Create {
-  // Store data for Next hook
   ctx.memory.context.Set("start_time", Date.now());
   
-  // Return null for default behavior
-  return null;
+  return null;  // Default behavior
   
-  // Or return configuration
+  // Or return configuration overrides
   return {
-    messages,                    // Modified messages
-    temperature: 0.7,            // Override temperature
-    connector: "gpt-4o",         // Override connector
-    prompt_preset: "task",       // Select prompt preset
+    messages, temperature: 0.7, connector: "gpt-4o", prompt_preset: "task",
     mcp_servers: [{ server_id: "agents.myapp.tools" }],
     uses: { search: "disabled" },
-    locale: "zh-cn",
   };
   
   // Or delegate to another agent
-  return {
-    delegate: {
-      agent_id: "specialist",
-      messages: messages,
-    },
-  };
+  return { delegate: { agent_id: "specialist", messages } };
 }
 ```
 
@@ -136,34 +137,16 @@ Called after LLM response and tool calls.
 
 ```typescript
 function Next(ctx: agent.Context, payload: agent.Payload): agent.Next {
-  const { messages, completion, tools, error } = payload;
+  const { tools, error } = payload;
+  if (error) return { data: { status: "error", message: error } };
   
-  // Handle errors
-  if (error) {
-    return { data: { status: "error", message: error } };
-  }
-  
-  // Process tool results
-  if (tools && tools.length > 0) {
-    const result = tools[0].result;
-    
-    // Delegate based on result
-    if (result?.intent === "query") {
-      return {
-        delegate: {
-          agent_id: "query_agent",
-          messages: payload.messages,
-        },
-      };
+  if (tools?.length > 0) {
+    if (tools[0].result?.intent === "query") {
+      return { delegate: { agent_id: "query_agent", messages: payload.messages } };
     }
-    
-    return {
-      data: { status: "success", results: tools.map(t => t.result) },
-    };
+    return { data: { status: "success", results: tools.map(t => t.result) } };
   }
-  
-  // Return null for standard LLM response
-  return null;
+  return null;  // Standard LLM response
 }
 ```
 
@@ -220,59 +203,37 @@ ctx.Replace(id, { type: "text", props: { content: "Done!" } });
 | `ctx.memory.context` | Request     | Pass data between hooks |
 
 ```typescript
-// Set/Get
 ctx.memory.context.Set("key", value);
 ctx.memory.context.Set("key", value, 300);  // With TTL
 const value = ctx.memory.context.Get("key");
-
-// Counters
-ctx.memory.user.Incr("api_calls");
-
-// Lists
-ctx.memory.chat.Push("history", [item1, item2]);
-ctx.memory.chat.ArrayGet("history", -1);  // Last item
-```
-
-## Trace
-
-```typescript
-const node = ctx.trace.Add(
-  { query: "input" },
-  { label: "Processing", type: "process", icon: "play" }
-);
-node.Info("Step completed");
-node.SetOutput({ result: data });
-node.Complete();
-// or node.Fail("error");
 ```
 
 ## MCP
 
 ```typescript
-// Call tool
 const result = ctx.mcp.CallTool("server_id", "tool_name", { arg: "value" });
-
-// Parallel calls
-const results = ctx.mcp.CallToolsParallel("server_id", [
-  { name: "tool1", arguments: { a: 1 } },
-  { name: "tool2", arguments: { b: 2 } },
-]);
 ```
+
+See [Context API Reference](references/context-api.md) for Trace, MCP parallel calls, memory counters/lists, and full API.
 
 ## Agent-to-Agent (A2A)
 
 ```typescript
-// Call single agent
-const result = ctx.agent.Call("specialist", messages, {
-  onChunk: (msg) => { console.log(msg); return 0; }
+// From hooks — ctx.agent.Call()
+const result = ctx.agent.Call("yao.keeper.classify", messages, {
+  skip: { output: true, history: true },
 });
+// result.content, result.error
 
-// Parallel calls
-const results = ctx.agent.All([
-  { agent: "agent-1", messages: [...] },
-  { agent: "agent-2", messages: [...] },
-]);
+// From any context (YaoJob, MCP, scripts) — Process
+const result = Process("agent.Call", {
+  assistant_id: "yao.keeper.classify",
+  messages: [{ role: "user", content: "Classify this..." }],
+  timeout: 120,  // optional, default 600s
+});
 ```
+
+See [Context API](references/context-api.md) for parallel calls, full parameters, and when to use which.
 
 ---
 
@@ -319,29 +280,16 @@ const results = ctx.agent.All([
 // @ts-nocheck
 import { agent } from "@yao/runtime";
 
-export function Recognize(
-  params: { intent: string; data: any },
-  ctx: agent.Context
-) {
-  const { intent, data } = params;
+export function Recognize(params: { intent: string; data: any }, ctx: agent.Context) {
   const ownerID = ctx.authorized?.team_id || ctx.authorized?.user_id;
-  
-  switch (intent) {
+  switch (params.intent) {
     case "query":
-      return handleQuery(data, ownerID);
-    case "submit":
-      return handleSubmit(data, ctx);
+      return { records: Process("models.agents.myapp.order.Get", {
+        wheres: [{ column: "__yao_created_by", value: ownerID }], limit: 20,
+      })};
     default:
       return { error: "Unknown intent" };
   }
-}
-
-function handleQuery(data: any, ownerID: string) {
-  const records = Process("models.agents.myapp.order.Get", {
-    wheres: [{ column: "__yao_created_by", value: ownerID }],
-    limit: 20,
-  });
-  return { records };
 }
 ```
 
@@ -367,11 +315,9 @@ Models in `models/` are auto-loaded with prefix `agents.<assistant_id>.`:
 }
 ```
 
-**Usage:**
+**Usage:** Model ID = `agents.myapp.order`, Table = `agents_myapp_order`
 
 ```typescript
-// Model ID: agents.myapp.order
-// Table: agents_myapp_order
 Process("models.agents.myapp.order.Get", { limit: 10 });
 Process("models.agents.myapp.order.Find", id);
 Process("models.agents.myapp.order.Create", { title: "New", amount: 100 });
@@ -379,24 +325,13 @@ Process("models.agents.myapp.order.Create", { title: "New", amount: 100 });
 
 ## Permission Columns
 
-When `option.permission: true`:
-
-| Column             | Description           |
-| ------------------ | --------------------- |
-| `__yao_created_by` | User who created      |
-| `__yao_team_id`    | Team ID               |
+When `option.permission: true`, auto-added columns: `__yao_created_by` (user), `__yao_team_id` (team).
 
 ```typescript
-// Create with permission
 Process("models.agents.myapp.order.Create", {
   title: "Order",
   __yao_created_by: ctx.authorized.user_id,
   __yao_team_id: ctx.authorized.team_id,
-});
-
-// Query with permission filter
-Process("models.agents.myapp.order.Get", {
-  wheres: [{ column: "__yao_created_by", value: ctx.authorized.user_id }],
 });
 ```
 
@@ -404,182 +339,94 @@ Process("models.agents.myapp.order.Get", {
 
 # Prompts
 
-**`prompts.yml`**:
+**`prompts.yml`** — system prompt with template variables:
 
 ```yaml
 - role: system
   content: |
     # Assistant Name
-
     You are an assistant that helps users with [task].
     Current date: {{ $CTX.date }}
     User locale: {{ $CTX.locale }}
-
-    ## Your Capabilities
-    - ✅ You CAN do X
-    - ❌ You CANNOT do Y
-
-    ## Tools Available
-    - `tool_name`: Description of what it does
-
-    ## Operating Procedure
-    1. Analyze user input
-    2. Extract required information
-    3. Call appropriate tool
 ```
 
-## Prompt Presets
-
-Create `prompts/` directory for different scenarios:
-
-```
-prompts/
-├── chat.yml      # Chat mode prompts
-└── task.yml      # Task mode prompts
-```
-
-Select in Create hook:
-
-```typescript
-return { prompt_preset: "task" };
-```
+**Prompt presets:** Create `prompts/chat.yml`, `prompts/task.yml`, then select in Create hook via `return { prompt_preset: "task" }`.
 
 ---
 
 # Locales
 
-**`locales/en-us.yml`**:
+`locales/en-us.yml` and `locales/zh-cn.yml` — referenced in `package.yao` via `{{ key }}`:
 
 ```yaml
+# locales/en-us.yml
 name: My Assistant
 description: Helps with tasks
 chat:
   title: New Chat
   prompts:
     - How can I help?
-    - Show me recent items
 ```
-
-**`locales/zh-cn.yml`**:
-
-```yaml
-name: 我的助手
-description: 帮助完成任务
-chat:
-  title: 新对话
-  prompts:
-    - 有什么可以帮您？
-    - 显示最近的项目
-```
-
-Reference in `package.yao` using `{{ key }}`.
 
 ---
 
 # Common Patterns
 
-## System Initialization Check
-
-```typescript
-function Create(ctx: agent.Context, messages: agent.Message[]): agent.Create {
-  if (!SystemReady(ctx)) {
-    Setup(ctx);
-  }
-  return { messages };
-}
-
-function SystemReady(ctx: agent.Context): boolean {
-  const ownerID = ctx.authorized?.team_id || ctx.authorized?.user_id;
-  const records = Process("models.agents.myapp.setting.Get", {
-    wheres: [{ column: "user_id", value: ownerID }],
-    limit: 1,
-  });
-  return Array.isArray(records) && records.length > 0;
-}
-```
-
 ## Loading Indicator
 
 ```typescript
 function Create(ctx: agent.Context, messages: agent.Message[]): agent.Create {
-  const loadingId = ctx.Send({
-    type: "loading",
-    props: { message: "Processing..." },
-  });
+  const loadingId = ctx.Send({ type: "loading", props: { message: "Processing..." } });
   ctx.memory.context.Set("loading_id", loadingId);
   return { messages };
 }
 
 function Next(ctx: agent.Context, payload: agent.Payload): agent.Next {
   const loadingId = ctx.memory.context.Get("loading_id");
-  if (loadingId) {
-    ctx.Replace(loadingId, {
-      type: "loading",
-      props: { message: "✅ Done", done: true },
-    });
-  }
+  if (loadingId) ctx.Replace(loadingId, { type: "loading", props: { message: "✅ Done", done: true } });
   return null;
 }
 ```
 
-## Multi-Agent Pipeline
+## Multi-Agent Delegation
 
 ```typescript
-// Main agent delegates to sub-agents based on intent
 function Next(ctx: agent.Context, payload: agent.Payload): agent.Next {
-  const { tools } = payload;
-  
-  if (tools && tools[0]?.result?.intent) {
-    const intent = tools[0].result.intent;
-    
-    // Delegate to specialized agent
-    return {
-      delegate: {
-        agent_id: `myapp.${intent}`,
-        messages: payload.messages,
-      },
-    };
+  if (payload.tools?.[0]?.result?.intent) {
+    return { delegate: { agent_id: `myapp.${payload.tools[0].result.intent}`, messages: payload.messages } };
   }
-  
   return null;
 }
 ```
 
-## Locale Detection
-
-```typescript
-function isChinese(ctx: agent.Context): boolean {
-  const locale = ctx.locale?.toLowerCase() || "";
-  return locale.startsWith("zh") || locale === "cn";
-}
-
-const message = isChinese(ctx) ? "处理中..." : "Processing...";
-```
+See [Hooks Patterns](references/hooks-patterns.md) for system init checks, locale detection, A2A patterns, and more.
 
 ---
 
 # Testing
 
-```bash
-# Test with message
-yao agent test -i "Hello" -n assistants.myapp
-
-# Test with JSONL file
-yao agent test -i tests/inputs.jsonl
-
-# Script tests
-yao agent test -i scripts.myapp.setup -v
-```
-
-**Test file (`src/*_test.ts`)**:
+Test files: `src/*_test.ts`. Functions must start with `Test` and be exported.
 
 ```typescript
-export function TestRecognize(t: agent.T) {
-  const result = Recognize({ intent: "query", data: {} }, t.ctx);
-  t.assert.notNull(result, "Should return result");
-  t.assert.eq(result.status, "success");
+export function TestSave(t: testing.T, ctx: agent.Context) {
+  const tid = ctx.authorized?.team_id || "team-001";
+  const result = Save(tid, { title: "Test " + Date.now(), content: "test" });
+  t.assert.True(result.entry_id.length > 0, "should have entry_id");
 }
 ```
+
+```bash
+# Script test — run from app root, use ./ for paths
+yao agent test -n myapp -i scripts.myapp.store \
+  --ctx ./assistants/myapp/tests/ctx.json -v
+
+# Quick E2E test
+yao agent test -n myapp -i "Hello" -v
+```
+
+**Key rules:** Run from app root. Use `./` prefix for `--ctx` and file paths. `src/` is implicit in script paths. Use `yao-dev` instead of `yao` when developing the engine itself.
+
+See [Testing Reference](references/testing.md) for full CLI flags, assertion API, path resolution, known issues, and patterns.
 
 ---
 
@@ -595,11 +442,23 @@ Process("models.agents.<id>.<model>.Create", data);
 Process("models.agents.<id>.<model>.Save", id, data);
 Process("models.agents.<id>.<model>.Delete", id);
 
+// A2A (from any context — YaoJob, MCP, scripts)
+Process("agent.Call", {
+  assistant_id: "target.agent.id",
+  messages: [{ role: "user", content: "..." }],
+  timeout: 120,  // optional, default 600s
+});
+
+// Text processing
+Process("text.ExtractJSON", llmOutput);     // Parse JSON from LLM text
+Process("text.HTMLToMarkdown", htmlString);  // HTML → Markdown
+
+// Store (cache)
+const cache = new Store("__yao.cache");
+cache.GetSet("key", (k) => expensiveQuery(k), 60);
+
 // Scripts
 Process("scripts.mymodule.MyFunction", arg1, arg2);
-
-// Session
-Process("session.Get", "user");
 ```
 
 ## File Naming
@@ -622,3 +481,4 @@ For detailed API documentation, see:
 - [Context API](references/context-api.md) - Full context object reference
 - [Hooks Patterns](references/hooks-patterns.md) - Common hook patterns
 - [Runtime API](references/runtime-api.md) - Process, http, FS, Store
+- [Testing](references/testing.md) - CLI flags, assertion API, path resolution, patterns
