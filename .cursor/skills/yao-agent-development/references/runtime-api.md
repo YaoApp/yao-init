@@ -361,39 +361,244 @@ V8 isolates can be destroyed at any time. Never use module-level JS variables fo
 
 ---
 
-## Query
+## Query (Query DSL)
+
+The Query DSL provides a structured, database-agnostic way to build complex SQL queries including aggregation, joins, subqueries, and unions.
 
 ```typescript
-const query = new Query("default");
+const qb = new Query("default");
+```
 
-// Get all
-const records = query.Get({
-  select: ["id", "name"],
-  from: "users",
-  wheres: [{ column: "status", value: "active" }],
-  limit: 100,
+### Methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `qb.Get(dsl)` | `Record[]` | Execute query, return all matching records |
+| `qb.First(dsl)` | `Record` | Execute query, return first record |
+| `qb.Paginate(dsl)` | `Paginate` | Execute query with pagination |
+| `qb.Run(dsl)` | `any` | Execute raw SQL statement |
+
+### QueryDSL Structure
+
+```typescript
+interface QueryDSL {
+  select?: string[];          // Fields to select (supports expressions)
+  from?: string;              // Table name or "$model.id" for models
+  wheres?: Where[];           // Where conditions
+  orders?: Order[];           // Order by
+  groups?: (string | Group)[]; // GROUP BY fields
+  havings?: Having[];         // HAVING conditions (with groups)
+  joins?: Join[];             // Table joins
+  unions?: QueryDSL[];        // UNION queries
+  query?: QueryDSL;           // Subquery (used as FROM)
+  name?: string;              // Subquery alias
+  sql?: SQL;                  // Raw SQL statement
+  limit?: number;             // Limit records (default 100)
+  offset?: number;            // Offset
+  page?: number;              // Page number (enables pagination)
+  pagesize?: number;          // Page size (default 20)
+  first?: any;                // Return first record only
+  debug?: boolean;            // Print SQL to log
+}
+```
+
+### Table / Model Reference
+
+| Format | Description | Example |
+|--------|-------------|---------|
+| `"table_name"` | Direct table name | `"users"` |
+| `"$model.id"` | Model reference (auto-resolves table name) | `"$agents.myapp.order"` |
+| `"table AS alias"` | Table with alias | `"users AS u"` |
+
+### Select Expressions
+
+```typescript
+// Simple fields
+select: ["id", "name", "status"]
+
+// With table prefix
+select: ["users.id", "users.name"]
+
+// Aggregation functions (prefix with ":")
+select: [":count(id) as total"]
+select: [":sum(amount) as total_amount"]
+select: [":avg(score) as avg_score"]
+select: [":max(price) as max_price"]
+select: [":min(price) as min_price"]
+
+// Mixed: fields + aggregation
+select: ["type", ":count(id) as cnt"]
+```
+
+### Where Conditions
+
+```typescript
+// Basic equality
+wheres: [{ field: "status", op: "=", value: "active" }]
+
+// Comparison operators: =, >, >=, <, <=, <>, like, in, is
+wheres: [{ field: "amount", op: ">", value: 100 }]
+wheres: [{ field: "name", op: "like", value: "%john%" }]
+wheres: [{ field: "status", op: "in", value: ["active", "pending"] }]
+wheres: [{ field: "deleted_at", op: "is", value: null }]
+
+// OR condition
+wheres: [
+  { field: "status", op: "=", value: "active" },
+  { field: "status", op: "=", value: "pending", or: true },
+]
+
+// Grouped conditions: WHERE a = 1 AND (b = 2 OR c = 3)
+wheres: [
+  { field: "a", op: "=", value: 1 },
+  {
+    wheres: [
+      { field: "b", op: "=", value: 2 },
+      { field: "c", op: "=", value: 3, or: true },
+    ],
+  },
+]
+```
+
+### Groups (GROUP BY) and Aggregation
+
+```typescript
+// Simple group
+groups: ["type"]
+
+// Multiple groups
+groups: ["type", "status"]
+
+// With rollup (multi-level aggregation summary)
+groups: [{ field: "type", rollup: "All Types" }]
+
+// Full example: count by type
+const qb = new Query("default");
+const rows = qb.Get({
+  select: ["type", ":count(id) as cnt"],
+  from: "$agents.myapp.entry",
+  wheres: [
+    { field: "team_id", op: "=", value: teamId },
+    { field: "status", op: "=", value: "active" },
+  ],
+  groups: ["type"],
 });
+// Returns: [{ type: "webpage", cnt: 15 }, { type: "note", cnt: 8 }, ...]
+```
 
-// Get first
-const user = query.First({
-  select: ["id", "name"],
-  from: "users",
-  wheres: [{ column: "id", value: 1 }],
+### Havings (filter aggregation results)
+
+```typescript
+// Only return groups with count > 5
+const rows = qb.Get({
+  select: ["type", ":count(id) as cnt"],
+  from: "$agents.myapp.entry",
+  groups: ["type"],
+  havings: [{ field: ":count(id)", op: ">", value: 5 }],
 });
+```
 
-// Paginate
-const result = query.Paginate({
+### Orders
+
+```typescript
+orders: [
+  { field: "created_at", sort: "desc" },
+  { field: "name", sort: "asc" },
+]
+```
+
+### Joins
+
+```typescript
+const rows = qb.Get({
+  select: ["orders.id", "users.name", "orders.amount"],
+  from: "orders",
+  joins: [
+    {
+      from: "users",
+      key: "users.id",
+      foreign: "orders.user_id",
+      left: true,  // LEFT JOIN (default is INNER JOIN)
+    },
+  ],
+  limit: 50,
+});
+```
+
+### Pagination
+
+```typescript
+const result = qb.Paginate({
   select: ["id", "name"],
-  from: "users",
+  from: "$agents.myapp.order",
+  wheres: [{ field: "status", op: "=", value: "active" }],
+  orders: [{ field: "created_at", sort: "desc" }],
   page: 1,
   pagesize: 20,
 });
+// Returns: { data: [...], total: 100, page: 1, pagesize: 20, pagecnt: 5, next: 2, prev: -1 }
+```
 
-// Raw SQL
-const result = query.Run({
-  stmt: "SELECT version()",
+### Raw SQL
+
+```typescript
+const result = qb.Run({
+  sql: { stmt: "SELECT version()" },
+});
+
+// With bound parameters
+const result = qb.Run({
+  sql: {
+    stmt: "SELECT * FROM users WHERE status = ? AND age > ?",
+    args: ["active", 18],
+  },
 });
 ```
+
+### Real-World Example: Aggregation Query
+
+```typescript
+/**
+ * Get entry type counts using GROUP BY + COUNT
+ * Instead of fetching all records and counting in JS
+ */
+function getTypeCounts(teamId: string): Record<string, number> {
+  const qb = new Query("default");
+  const rows = qb.Get({
+    select: ["type", ":count(id) as cnt"],
+    from: "$agents.myapp.entry",
+    wheres: [
+      { field: "team_id", op: "=", value: teamId },
+      { field: "status", op: "=", value: "active" },
+    ],
+    groups: ["type"],
+  });
+
+  const counts: Record<string, number> = {};
+  for (const row of rows || []) {
+    if (row.type) counts[row.type] = row.cnt || 0;
+  }
+  return counts;
+}
+
+// Equivalent SQL:
+// SELECT type, COUNT(id) AS cnt
+// FROM keeper_entry
+// WHERE team_id = ? AND status = 'active'
+// GROUP BY type
+```
+
+### Query DSL vs Model Process
+
+| Feature | `Process("models.*.Get", ...)` | `new Query("default")` |
+|---------|-------------------------------|----------------------|
+| Simple CRUD | Preferred | Overkill |
+| GROUP BY / Aggregation | Not supported | Use this |
+| JOIN across tables | Not supported | Use this |
+| Subqueries / UNION | Not supported | Use this |
+| Raw SQL | Not supported | `qb.Run()` |
+| Where syntax | `{ column, value, op }` | `{ field, value, op }` |
+| Table reference | Implicit from model ID | `"$model.id"` or `"table_name"` |
 
 ---
 
