@@ -1,0 +1,9 @@
+{
+  "label": "Claude Opus 4.6",
+  "type": "anthropic",
+  "options": {
+    "model": "claude-opus-4-6",
+    "key": "$ENV.ANTHROPIC_API_KEY",
+    "thinking": { "type": "adaptive" }
+  }
+}

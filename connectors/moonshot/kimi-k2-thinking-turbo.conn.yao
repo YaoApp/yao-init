@@ -1,0 +1,9 @@
+{
+  "label": "Moonshot Kimi K2 Thinking Turbo",
+  "type": "openai",
+  "options": {
+    "model": "kimi-k2-thinking-turbo",
+    "key": "$ENV.MOONSHOT_API_KEY",
+    "proxy": "$ENV.MOONSHOT_PROXY"
+  }
+}

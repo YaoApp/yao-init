@@ -1,0 +1,8 @@
+{
+  "label": "Claude Sonnet 4.5",
+  "type": "anthropic",
+  "options": {
+    "model": "claude-sonnet-4-5-20250929",
+    "key": "$ENV.ANTHROPIC_API_KEY"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "label": "Claude Sonnet 4.5 Thinking",
+  "type": "anthropic",
+  "options": {
+    "model": "claude-sonnet-4-5-20250929",
+    "key": "$ENV.ANTHROPIC_API_KEY",
+    "thinking": { "type": "enabled", "budget_tokens": 10000 }
+  }
+}

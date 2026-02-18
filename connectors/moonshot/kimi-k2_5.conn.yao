@@ -1,0 +1,13 @@
+{
+  "label": "Moonshot Kimi K2.5",
+  "type": "openai",
+  "options": {
+    "model": "kimi-k2.5",
+    "key": "$ENV.MOONSHOT_API_KEY",
+    "proxy": "$ENV.MOONSHOT_PROXY",
+    "thinking": {
+      "type": "disabled"
+    },
+    "temperature": 0.6
+  }
+}

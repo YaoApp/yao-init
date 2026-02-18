@@ -1,0 +1,9 @@
+{
+  "label": "Moonshot Kimi K2 0905 Preview",
+  "type": "openai",
+  "options": {
+    "model": "kimi-k2-0905-preview",
+    "key": "$ENV.MOONSHOT_API_KEY",
+    "proxy": "$ENV.MOONSHOT_PROXY"
+  }
+}
