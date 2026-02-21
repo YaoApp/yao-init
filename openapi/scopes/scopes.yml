@@ -9,6 +9,7 @@ public:
   - GET /user/entry/captcha
   - POST /user/entry/verify
   - GET /user/teams/invitations/:invitation_id
+  - POST /otp/login
 
 # Default endpoint rules (can be overridden by specific scopes)
 endpoints:

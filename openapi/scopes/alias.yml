@@ -41,6 +41,7 @@ client:free:
   - job:all
   - agent:all
   - chat:all
+  - otp:all
   - messenger:all
   - trace:all
   - sandbox:all
@@ -55,6 +56,7 @@ client:pro:
   - job:all
   - agent:all
   - chat:all
+  - otp:all
   - dsl:all
   - llm:all
   - mcp:all
@@ -72,6 +74,7 @@ client:ent:
   - job:all
   - agent:all
   - chat:all
+  - otp:all
   - dsl:all
   - llm:all
   - mcp:all
@@ -159,6 +162,7 @@ team:owner:
   - job:all:team
   - agent:all:team
   - chat:all:team
+  - otp:all:team
   - dsl:all:team
   - llm:all:team
   - mcp:all:team
@@ -176,6 +180,7 @@ team:admin:
   - job:manage:team
   - agent:manage:team
   - chat:manage:team
+  - otp:manage:team
   - dsl:manage:team
   - llm:manage:team
   - mcp:manage:team
@@ -760,6 +765,20 @@ trace:read:team:
 
 trace:read:own:
   - trace:traces:read:own
+
+# ============ OTP Resources Aliases ============
+
+otp:all:
+  - otp:codes:create:all
+
+otp:all:own:
+  - otp:codes:create:team
+
+otp:all:team:
+  - otp:codes:create:team
+
+otp:manage:team:
+  - otp:codes:create:team
 
 # ============ App Resources Aliases ============
 
