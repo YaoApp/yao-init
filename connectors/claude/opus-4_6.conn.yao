@@ -4,6 +4,14 @@
   "options": {
     "model": "claude-opus-4-6",
     "key": "$ENV.ANTHROPIC_API_KEY",
-    "thinking": { "type": "adaptive" }
+    "thinking": { "type": "adaptive" },
+    "capabilities": {
+      "vision": "claude",
+      "tool_calls": true,
+      "reasoning": true,
+      "streaming": true,
+      "json": true,
+      "multimodal": true
+    }
   }
 }

@@ -8,6 +8,12 @@
     "thinking": {
       "type": "disabled"
     },
-    "temperature": 0.6
+    "temperature": 0.6,
+    "capabilities": {
+      "vision": true,
+      "tool_calls": true,
+      "streaming": true,
+      "json": true
+    }
   }
 }

@@ -3,6 +3,13 @@
   "type": "anthropic",
   "options": {
     "model": "claude-sonnet-4-5-20250929",
-    "key": "$ENV.ANTHROPIC_API_KEY"
+    "key": "$ENV.ANTHROPIC_API_KEY",
+    "capabilities": {
+      "vision": "claude",
+      "tool_calls": true,
+      "streaming": true,
+      "json": true,
+      "multimodal": true
+    }
   }
 }

@@ -4,6 +4,13 @@
   "options": {
     "model": "kimi-k2-thinking",
     "key": "$ENV.MOONSHOT_API_KEY",
-    "proxy": "$ENV.MOONSHOT_PROXY"
+    "proxy": "$ENV.MOONSHOT_PROXY",
+    "capabilities": {
+      "vision": true,
+      "tool_calls": true,
+      "reasoning": true,
+      "streaming": true,
+      "json": true
+    }
   }
 }
