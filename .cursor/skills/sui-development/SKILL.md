@@ -511,7 +511,61 @@ messages:
 
 > **`messages:` key matching**: The key must be the exact trimmed text content from the HTML.
 > For `<span s:trans>Hello World</span>`, the key is `Hello World`.
-> For `<li s:trans><strong>Primary</strong> — CTA button</li>`, the key is the full inner HTML.
+
+### Mixed HTML Content — Use Separate Elements
+
+`s:trans` captures the **full innerHTML** of the element. If an element contains child HTML tags
+(like `<strong>`, `<a>`, `<code>`), the entire innerHTML becomes the key, which is fragile and
+often fails to match. **Always split mixed content into separate translatable elements.**
+
+**Wrong** — `s:trans` on a parent that contains child tags:
+
+```html
+<li s:trans><strong>Primary</strong> — Main page action (CTA)</li>
+<!-- key becomes: "<strong>Primary</strong> — Main page action (CTA)" -->
+<!-- This will NOT match in the locale file -->
+
+<p s:trans>Click <a href="#">here</a> to continue.</p>
+<!-- key becomes: "Click <a href=\"#\">here</a> to continue." — won't match -->
+```
+
+**Correct** — put `s:trans` only on leaf elements containing pure text:
+
+```html
+<li><strong>Primary</strong> — <span s:trans>Main page action (CTA)</span></li>
+<!-- key: "Main page action (CTA)" ✓ -->
+
+<p><span s:trans>Click</span> <a href="#" s:trans>here</a> <span s:trans>to continue.</span></p>
+<!-- keys: "Click", "here", "to continue." ✓ -->
+```
+
+**Rule of thumb**: if an element contains any child HTML tags, do NOT put `s:trans` on it.
+Instead, wrap each translatable text segment in its own `<span s:trans>` or put `s:trans`
+on the child element directly. Non-translatable content (variable names, CSS class names,
+code tokens) stays outside `s:trans` elements.
+
+### YAML Value Quoting
+
+YAML values that contain colons (`:`) MUST be quoted, otherwise the YAML parser treats
+the colon as a nested mapping delimiter and the entire file fails to parse.
+
+**Wrong**:
+
+```yaml
+messages:
+  "Header bar, floating panels.": 顶栏。配合 backdrop-filter: blur 使用。
+  # ← YAML parser error: "mapping values are not allowed here"
+```
+
+**Correct**:
+
+```yaml
+messages:
+  "Header bar, floating panels.": "顶栏。配合 backdrop-filter: blur 使用。"
+  # ← value is quoted, colon inside is safe
+```
+
+**Always quote values that contain**: `:`, `#`, `{`, `}`, `[`, `]`, `,`, `&`, `*`, `?`, `|`, `-`, `<`, `>`, `=`, `!`, `%`, `@`, `` ` ``.
 
 ## Build Commands
 
