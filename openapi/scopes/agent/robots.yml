@@ -12,6 +12,7 @@ agent:robots:read:all:
     - GET /agent/robots
     - GET /agent/robots/:id
     - GET /agent/robots/:id/status
+    - GET /agent/robots/:id/host
 
 agent:robots:read:own:
   owner: true
@@ -20,6 +21,7 @@ agent:robots:read:own:
     - GET /agent/robots
     - GET /agent/robots/:id
     - GET /agent/robots/:id/status
+    - GET /agent/robots/:id/host
 
 agent:robots:read:team:
   team: true
@@ -28,6 +30,7 @@ agent:robots:read:team:
     - GET /agent/robots
     - GET /agent/robots/:id
     - GET /agent/robots/:id/status
+    - GET /agent/robots/:id/host
 
 # ============ Write Permissions ============
 
@@ -36,6 +39,9 @@ agent:robots:write:all:
   endpoints:
     - POST /agent/robots
     - PUT /agent/robots/:id
+    - POST /agent/robots/integrations/verify
+    - POST /agent/robots/integrations/weixin/qrcode
+    - GET /agent/robots/integrations/weixin/qrcode/:session_key
 
 agent:robots:write:own:
   owner: true
@@ -43,6 +49,9 @@ agent:robots:write:own:
   endpoints:
     - POST /agent/robots
     - PUT /agent/robots/:id
+    - POST /agent/robots/integrations/verify
+    - POST /agent/robots/integrations/weixin/qrcode
+    - GET /agent/robots/integrations/weixin/qrcode/:session_key
 
 agent:robots:write:team:
   team: true
@@ -50,6 +59,9 @@ agent:robots:write:team:
   endpoints:
     - POST /agent/robots
     - PUT /agent/robots/:id
+    - POST /agent/robots/integrations/verify
+    - POST /agent/robots/integrations/weixin/qrcode
+    - GET /agent/robots/integrations/weixin/qrcode/:session_key
 
 # ============ Delete Permissions ============
 
@@ -103,27 +115,45 @@ agent:robots:execute:team:
     - POST /agent/robots/:id/executions/:exec_id/cancel
 
 # ============ Trigger Permissions ============
-# Trigger and intervene robot executions
+# Trigger, intervene, and interact with robot executions
 
 agent:robots:trigger:all:
-  description: "Trigger and intervene all robot executions"
+  description: "Trigger, intervene, and interact with all robot executions"
   endpoints:
     - POST /agent/robots/:id/trigger
     - POST /agent/robots/:id/executions/:exec_id/intervene
+    - POST /agent/robots/:id/interact
+    - POST /agent/robots/:id/executions/:exec_id/tasks/:task_id/reply
+    - POST /agent/robots/:id/executions/:exec_id/confirm
+    - POST /agent/robots/:id/completions
+    - POST /agent/robots/:id/completions/:context_id/append
+    - POST /agent/robots/:id/execute
 
 agent:robots:trigger:own:
   owner: true
-  description: "Trigger and intervene own robot executions"
+  description: "Trigger, intervene, and interact with own robot executions"
   endpoints:
     - POST /agent/robots/:id/trigger
     - POST /agent/robots/:id/executions/:exec_id/intervene
+    - POST /agent/robots/:id/interact
+    - POST /agent/robots/:id/executions/:exec_id/tasks/:task_id/reply
+    - POST /agent/robots/:id/executions/:exec_id/confirm
+    - POST /agent/robots/:id/completions
+    - POST /agent/robots/:id/completions/:context_id/append
+    - POST /agent/robots/:id/execute
 
 agent:robots:trigger:team:
   team: true
-  description: "Trigger and intervene team robot executions"
+  description: "Trigger, intervene, and interact with team robot executions"
   endpoints:
     - POST /agent/robots/:id/trigger
     - POST /agent/robots/:id/executions/:exec_id/intervene
+    - POST /agent/robots/:id/interact
+    - POST /agent/robots/:id/executions/:exec_id/tasks/:task_id/reply
+    - POST /agent/robots/:id/executions/:exec_id/confirm
+    - POST /agent/robots/:id/completions
+    - POST /agent/robots/:id/completions/:context_id/append
+    - POST /agent/robots/:id/execute
 
 # ============ Results Permissions ============
 # Read robot execution results (completed executions with delivery content)

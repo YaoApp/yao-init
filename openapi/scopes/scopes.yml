@@ -13,8 +13,19 @@ public:
 
 # Default endpoint rules (can be overridden by specific scopes)
 endpoints:
-  # Knowledge Base - Write operations require specific scopes
-  # - POST /kb/* deny
-  # - PUT /kb/* deny
-  # - DELETE /kb/* deny
-  # - GET /kb/* deny
+  # Sandbox Management
+  - GET /sandbox/* allow
+  - POST /sandbox/* allow
+  - DELETE /sandbox/* allow
+
+  # Computer Options
+  - GET /computer/* allow
+
+  # Workspace Management
+  - GET /workspace/* allow
+  - POST /workspace/* allow
+  - PUT /workspace/* allow
+  - DELETE /workspace/* allow
+
+  # Nodes (read-only)
+  - GET /nodes/* allow

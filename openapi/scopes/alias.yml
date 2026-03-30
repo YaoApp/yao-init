@@ -45,6 +45,9 @@ client:free:
   - messenger:all
   - trace:all
   - sandbox:all
+  - computer:all
+  - workspace:all
+  - nodes:all
   - __yao:all
   - api:all
 
@@ -63,6 +66,9 @@ client:pro:
   - messenger:all
   - trace:all
   - sandbox:all
+  - computer:all
+  - workspace:all
+  - nodes:all
   - __yao:all
   - api:all
 
@@ -81,6 +87,9 @@ client:ent:
   - messenger:all
   - trace:all
   - sandbox:all
+  - computer:all
+  - workspace:all
+  - nodes:all
   - __yao:all
   - api:all
 
@@ -104,11 +113,15 @@ user:free:
   - job:all:own
   - agent:read:own
   - chat:all:own
+  - otp:all:own
   - llm:all:own
   - mcp:all:own
   - messenger:all:own
   - trace:all:own
   - sandbox:all:own
+  - computer:all:own
+  - workspace:all:own
+  - nodes:all:own
   - __yao:all:own
   - api:all:own
 
@@ -120,12 +133,16 @@ user:pro:
   - job:all:own
   - agent:all:own
   - chat:all:own
+  - otp:all:own
   - dsl:all:own
   - llm:all:own
   - mcp:all:own
   - messenger:all:own
   - trace:all:own
   - sandbox:all:own
+  - computer:all:own
+  - workspace:all:own
+  - nodes:all:own
   - __yao:all:own
   - api:all:own
 
@@ -137,12 +154,16 @@ user:ent:
   - job:all:own
   - agent:all:own
   - chat:all:own
+  - otp:all:own
   - dsl:all:own
   - llm:all:own
   - mcp:all:own
   - messenger:all:own
   - trace:all:own
   - sandbox:all:own
+  - computer:all:own
+  - workspace:all:own
+  - nodes:all:own
   - __yao:all:own
   - api:all:own
 
@@ -169,6 +190,9 @@ team:owner:
   - messenger:all:team
   - trace:all:team
   - sandbox:all:team
+  - computer:all:team
+  - workspace:all:team
+  - nodes:all:team
   - __yao:all:team
   - api:all:team
 
@@ -187,6 +211,9 @@ team:admin:
   - messenger:all:team
   - trace:read:team
   - sandbox:all:team
+  - computer:all:team
+  - workspace:manage:team
+  - nodes:all:team
   - __yao:all:team
   - api:all:team
 
@@ -217,6 +244,11 @@ team:member:
   - trace:read:team
   - trace:read:own
   - sandbox:read:own
+  - sandbox:write:own
+  - computer:read:own
+  - workspace:read:team
+  - workspace:write:own
+  - nodes:read:team
   - __yao:all:team
   - api:all:own
 
@@ -819,16 +851,113 @@ api:all:team:
 # ============ Sandbox Resources Aliases ============
 
 sandbox:all:
+  - sandbox:sandboxes:read:all
+  - sandbox:sandboxes:write:all
+  - sandbox:sandboxes:exec:all
+  - sandbox:sandboxes:delete:all
   - sandbox:vnc:read:all
 
 sandbox:all:own:
+  - sandbox:sandboxes:read:own
+  - sandbox:sandboxes:write:own
+  - sandbox:sandboxes:exec:own
+  - sandbox:sandboxes:delete:own
   - sandbox:vnc:read:own
 
 sandbox:all:team:
+  - sandbox:sandboxes:read:team
+  - sandbox:sandboxes:write:team
+  - sandbox:sandboxes:exec:team
+  - sandbox:sandboxes:delete:team
+  - sandbox:vnc:read:team
+
+sandbox:manage:team:
+  - sandbox:sandboxes:read:team
+  - sandbox:sandboxes:write:team
+  - sandbox:sandboxes:exec:team
+  - sandbox:sandboxes:delete:team
   - sandbox:vnc:read:team
 
 sandbox:read:team:
+  - sandbox:sandboxes:read:team
   - sandbox:vnc:read:team
 
 sandbox:read:own:
+  - sandbox:sandboxes:read:own
   - sandbox:vnc:read:own
+
+sandbox:write:own:
+  - sandbox:sandboxes:write:own
+  - sandbox:sandboxes:exec:own
+  - sandbox:sandboxes:delete:own
+
+# ============ Computer Resources Aliases ============
+
+computer:all:
+  - computer:computers:read:all
+
+computer:all:own:
+  - computer:computers:read:own
+
+computer:all:team:
+  - computer:computers:read:team
+
+computer:read:team:
+  - computer:computers:read:team
+
+computer:read:own:
+  - computer:computers:read:own
+
+# ============ Workspace Resources Aliases ============
+
+workspace:all:
+  - workspace:workspaces:read:all
+  - workspace:workspaces:write:all
+  - workspace:workspaces:delete:all
+  - workspace:workspaces:files:all
+
+workspace:all:own:
+  - workspace:workspaces:read:own
+  - workspace:workspaces:write:own
+  - workspace:workspaces:delete:own
+  - workspace:workspaces:files:own
+
+workspace:all:team:
+  - workspace:workspaces:read:team
+  - workspace:workspaces:write:team
+  - workspace:workspaces:delete:team
+  - workspace:workspaces:files:team
+
+workspace:manage:team:
+  - workspace:workspaces:read:team
+  - workspace:workspaces:write:team
+  - workspace:workspaces:delete:team
+  - workspace:workspaces:files:team
+
+workspace:read:team:
+  - workspace:workspaces:read:team
+
+workspace:read:own:
+  - workspace:workspaces:read:own
+
+workspace:write:own:
+  - workspace:workspaces:write:own
+  - workspace:workspaces:delete:own
+  - workspace:workspaces:files:own
+
+# ============ Nodes Resources Aliases ============
+
+nodes:all:
+  - nodes:nodes:read:all
+
+nodes:all:own:
+  - nodes:nodes:read:own
+
+nodes:all:team:
+  - nodes:nodes:read:team
+
+nodes:read:team:
+  - nodes:nodes:read:team
+
+nodes:read:own:
+  - nodes:nodes:read:own
