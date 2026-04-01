@@ -410,9 +410,13 @@ Use `[param]` in folder names:
 SUI i18n is **server-side rendered**. The build process:
 
 1. Scans HTML for `s:trans` elements and `'::text'` / `__m("text")` markers
-2. Extracts text, assigns auto-generated keys like `trans__<route>_1`, `trans__<route>_2`, ...
-3. Looks up each extracted text in the locale file's `messages:` map to find translations
-4. Writes compiled locale files to `public/.locales/<locale>/<route>.yml` with `keys:` map
+2. Extracts text, assigns auto-generated keys like `trans_<route>_1`, `trans_<route>_2`, ...
+   (route slashes become underscores: route `features/hero` → key prefix `trans_features_hero`)
+3. For each key, looks up translations via two mechanisms (in order):
+   a. **`keys:`** — direct mapping `trans_<route>_N: translated text` (primary, used at runtime)
+   b. **`messages:`** — original text → translated text lookup (used during build to populate `keys:`)
+4. Writes compiled locale files to `public/.locales/<locale>/<route>.yml` with resolved `keys:` map
+   (the `messages:` block is **stripped** from compiled output — only `keys:` survives)
 5. At request time, reads the `locale` cookie, loads the compiled locale, and replaces text
 
 **The `locale` cookie must use lowercase values: `zh-cn`, `en-us`, `ja`, etc.**
@@ -438,6 +442,24 @@ const message = __m("Welcome back");
 const label = T("Settings");
 ```
 
+> **Important**: `T()` and `__m()` can only be called **inside functions**, not at module top-level.
+> The SUI translation runtime is not initialized when top-level constants are evaluated.
+>
+> **Wrong** — `T()` at top level:
+>
+> ```typescript
+> const LABEL = T("Hello"); // ✗ — T() not available yet, returns undefined or throws
+> ```
+>
+> **Correct** — `T()` inside a function:
+>
+> ```typescript
+> const LABEL_KEY = "Hello";
+> function init() {
+>   const label = T(LABEL_KEY); // ✓ — called at runtime
+> }
+> ```
+
 > **Important**: `s:trans` captures the **trimmed text content** of the element as the lookup key.
 > The key in `messages:` must match **exactly** (case-sensitive, whitespace-trimmed).
 
@@ -450,10 +472,20 @@ __locales/
 ├── en-us/
 │   ├── __global.yml        # Shared translations (header, footer, etc.)
 │   ├── index.yml           # Page-specific: /index
+│   ├── features.yml        # Page-specific: /features (parent page itself)
+│   ├── features/           # Sub-component locale files
+│   │   ├── hero.yml        # For component at /features/hero
+│   │   ├── agents.yml      # For component at /features/agents
+│   │   └── cta.yml         # For component at /features/cta
 │   └── styleguide.yml      # Page-specific: /styleguide
 ├── zh-cn/
 │   ├── __global.yml
 │   ├── index.yml
+│   ├── features.yml
+│   ├── features/
+│   │   ├── hero.yml
+│   │   ├── agents.yml
+│   │   └── cta.yml
 │   └── styleguide.yml
 ├── zh-tw/
 │   └── ...
@@ -466,8 +498,102 @@ __locales/
 - Directory names MUST be **lowercase**: `zh-cn`, `en-us`, `ja` (not `zh-CN`)
 - Page locale file name = page route: route `/styleguide` → `styleguide.yml`
 - `__global.yml` is merged into every page's locale at build time
-- Component translations (header, footer via `is="/header"`) are merged into the **parent page's** locale during build
-- Do NOT put locale files inside component directories (e.g. ~~`header/__locales/`~~) — SUI ignores those
+- **Sub-component translations MUST go in route-matching files** (see next section)
+- Do NOT put locale files inside component source directories (e.g. ~~`features/hero/__locales/`~~)
+
+## Sub-Component Locale Files (CRITICAL)
+
+When a page includes sub-components via `is="/features/hero"`, each sub-component gets its
+own translation key prefix based on its route. The build process uses **prefix filtering** to
+match keys to locale files:
+
+- Parent page `/features` → key prefix `trans_features_` → reads `__locales/<lang>/features.yml`
+- Sub-component `/features/hero` → key prefix `trans_features_hero_` → reads `__locales/<lang>/features/hero.yml`
+- Sub-component `/features/agents` → key prefix `trans_features_agents_` → reads `__locales/<lang>/features/agents.yml`
+
+**The parent page's `MergeTranslations` only processes keys matching its own prefix.**
+Sub-component keys (e.g. `trans_features_hero_*`) do NOT match the parent prefix (`trans_features_*`),
+so they are resolved from their own locale files via `Merge(compLocale)`.
+
+**Wrong** — putting all translations in the parent file only:
+
+```
+__locales/zh-cn/
+└── features.yml          # Has messages for hero, agents, etc.
+                          # ✗ — sub-component keys won't be resolved!
+```
+
+**Correct** — one locale file per route (parent + each sub-component):
+
+```
+__locales/zh-cn/
+├── features.yml          # Translations for features.html itself (if any)
+└── features/
+    ├── hero.yml          # Translations for features/hero component
+    ├── agents.yml        # Translations for features/agents component
+    ├── technical.yml     # Translations for features/technical component
+    └── cta.yml           # Translations for features/cta component
+```
+
+Each sub-component file needs both `keys:` and `messages:`:
+
+```yaml
+# __locales/zh-cn/features/hero.yml
+keys:
+    trans__features_hero_1: AI 团队
+    trans__features_hero_2: 一应俱全
+messages:
+  "Your AI Team": "AI 团队"
+  "Ready for Action": "一应俱全"
+```
+
+### Managing `keys:` (CRITICAL — Learned the Hard Way)
+
+**NEVER clear `keys:` to `{}` and expect `yao sui trans` to regenerate them.**
+`yao sui trans` only updates *existing* keys — it does NOT create new keys from scratch.
+
+The `keys:` are generated during `yao sui build`, which scans HTML `s:trans` tags, assigns
+sequential numbers, and resolves translations from `messages:`. The result is written to
+**compiled output** at `public/.locales/<lang>/<route>.yml`, NOT back to source files.
+
+**When you add new `s:trans` content to an existing component:**
+
+1. Ensure the new text has corresponding `messages:` entries in the locale file
+2. Run `yao sui build` — it generates compiled locale with the new keys
+3. Check compiled output: `cat public/.locales/<lang>/<route>/component.yml`
+4. Copy the new `keys:` block from compiled output back into the source locale file
+5. Run `yao sui build` again to finalize
+
+**If you accidentally cleared `keys: {}`:**
+
+1. Run `yao sui build` — the compiled output still generates correct keys from `messages:`
+2. Extract keys from compiled output:
+   ```bash
+   cat public/.locales/zh-cn/features/hero.yml | grep "trans__features_hero_"
+   ```
+3. Paste the keys block back into `__locales/zh-cn/features/hero.yml`
+4. Rebuild
+
+**Why this matters**: At render time, SUI runtime uses `keys:` from the **source locale files**
+(merged during build). If source `keys:` is empty, the compiled output gets empty keys too
+(for that locale), and translations silently fall back to English.
+
+### How `keys:` and `messages:` Work Together (Source Code Reference)
+
+The build pipeline (`sui/core/locale.go`) resolves translations in this order:
+
+1. **`MergeTranslations`**: For each extracted `s:trans` text, finds the matching `messages:` entry
+   and writes the translated value into `keys:` (e.g. `trans_features_hero_1: 翻译值`)
+2. **`ParseKeys`**: If a `keys:` value points to another `messages:` key (indirect reference),
+   resolves it to the final translated text
+3. **`Merge(compLocale)`**: Merges sub-component locale data (their `keys:`) into the parent page locale
+
+At **render time** (`sui/core/parser.go`), the `transNode` function checks:
+1. First: `keys[key]` — if found and differs from source text, use it
+2. Then: `messages[sourceText]` — fallback lookup
+3. Otherwise: return original text unchanged
+
+Since compiled output **strips `messages:`**, runtime effectively relies on `keys:` only.
 
 ## Locale File Format
 
@@ -506,7 +632,7 @@ messages:
 | `messages:` | Map of original text → translated text. Key = exact text from `s:trans` element | Yes |
 | `direction:` | Text direction: `ltr` or `rtl` | No |
 | `timezone:` | Timezone offset string | No |
-| `keys:` | Auto-generated by `yao sui trans` — do NOT edit manually | No |
+| `keys:` | Auto-generated by `yao sui trans` — maps `trans_<route>_N` to translated text. Do NOT edit manually | No |
 | `script_messages:` | Translations for `__m()` / `T()` calls in `.ts` scripts | No |
 
 > **`messages:` key matching**: The key must be the exact trimmed text content from the HTML.
@@ -570,13 +696,42 @@ messages:
 ## Build Commands
 
 ```bash
-yao sui trans <sui> <template>              # Extract strings & generate locale scaffolds
+yao sui trans <sui> <template>              # Extract strings, generate/update locale scaffolds, then build
 yao sui trans <sui> <template> -l zh-cn,ja  # Only specific locales
-yao sui build <sui> <template>              # Build (compiles translations into public/)
+yao sui build <sui> <template>              # Build only (compiles translations into public/)
 ```
 
-`yao sui trans` scans all pages, extracts `s:trans` / `__m()` text, and writes scaffolds to
-`__locales/<locale>/<route>.yml` with empty `messages:` entries for you to fill in.
+`yao sui trans` scans all pages, extracts `s:trans` / `__m()` text, merges with existing
+`messages:` in locale files, generates `keys:` mappings, and then triggers a full build.
+After adding new locale files, **always run `yao sui trans` first** (not just `build`)
+to ensure `keys:` are properly generated from `messages:`.
+
+## Workflow: Adding i18n to a New Page
+
+1. Add `s:trans` attributes to all translatable text in HTML
+2. Create locale files matching the page route structure:
+   - `__locales/<lang>/<page>.yml` for the page itself
+   - `__locales/<lang>/<page>/<component>.yml` for each sub-component
+3. Fill in `messages:` with `"English text": "翻译"` pairs (set `keys: {}` initially)
+4. Run `yao sui build <sui> <template>` to compile — this generates correct `keys:` in compiled output
+5. Extract keys from compiled output and write them back to source locale files:
+   ```bash
+   cat public/.locales/zh-cn/<page>/<component>.yml | grep "trans__"
+   ```
+6. Paste the `keys:` block into `__locales/zh-cn/<page>/<component>.yml` (replacing `keys: {}`)
+7. Run `yao sui build` again to finalize
+8. Verify: switch language in browser, confirm all text is translated
+
+## Workflow: Adding New Translatable Content to an Existing Page
+
+1. Add new `s:trans` elements in the component HTML
+2. Add corresponding `messages:` entries to the locale files (all languages)
+3. Run `yao sui build` — compiled output will contain new keys (e.g. `trans__features_hero_21` onwards)
+4. Extract the **full** keys block from compiled output and replace source `keys:` with it
+5. Rebuild — translations will now work correctly
+
+**Do NOT** clear `keys:` to `{}` expecting `yao sui trans` to regenerate.
+**Do NOT** rely on `yao sui trans` alone to add new keys — it only updates existing ones.
 
 ## Dynamic `<html lang>`
 
