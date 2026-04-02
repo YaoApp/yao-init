@@ -374,6 +374,64 @@ await api.Post<User>("/users", { name: "John" });
 | `cookie-jwt` | Cookie-based JWT              |
 | `-`          | Public (no auth)              |
 
+## Content Negotiation — Markdown Output
+
+SUI pages can serve raw Markdown (or other formats) instead of HTML when requested with
+a `.md` URL suffix or `Accept: text/markdown` header. This lets AI agents consume the
+same URLs humans visit, but receive structured text instead of rendered HTML.
+
+**How it works:**
+
+1. Request comes in: `GET /docs/en-us/getting-started/what-is-yao-agents.md`
+2. Middleware detects `.md` suffix → strips it, sets `content_type=markdown` on the context
+3. SUI loads the page, parses config, finds `"markdown"` handler
+4. Calls the handler (backend.ts method or Yao process) → returns raw text
+5. Response: `200 text/markdown; charset=utf-8` with the raw content
+
+**Config — using a backend.ts method (preferred):**
+
+```json
+{
+  "title": "Documentation",
+  "guard": "-",
+  "markdown": {
+    "method": "Markdown"
+  }
+}
+```
+
+The `method` calls a function exported from the page's own `backend.ts`. The function
+receives the same `request` object as `Content` / `Catalog` / `BeforeRender`:
+
+```typescript
+function Markdown(request: any): string {
+  const id = request.params?.id || "";
+  // ... parse route, read file ...
+  return fs.ReadFile(mdxPath);  // return raw markdown string
+}
+```
+
+**Config — using a global Yao process (fallback):**
+
+```json
+{
+  "markdown": {
+    "process": "scripts.docs.RawMarkdown",
+    "in": ["$param.id"]
+  }
+}
+```
+
+`in` supports `$param.*`, `$query.*`, `$header.*` placeholders (same as `http.yao`).
+
+**Rules:**
+
+- If config has no `markdown` field → `.md` requests return 404
+- `method` takes priority over `process` when both are set
+- Handler must return a `string` (or `[]byte`)
+- Normal HTML requests (no `.md` suffix, no `Accept: text/markdown`) are unaffected
+- The same pattern can be extended for other formats (e.g. `"json"` field in the future)
+
 ---
 
 # Routing
@@ -454,11 +512,49 @@ const label = T("Settings");
 > **Correct** — `T()` inside a function:
 >
 > ```typescript
-> const LABEL_KEY = "Hello";
 > function init() {
->   const label = T(LABEL_KEY); // ✓ — called at runtime
+>   const label = T("Hello"); // ✓ — literal string, called at runtime
 > }
 > ```
+
+> **CRITICAL**: `T()` arguments MUST be **string literals**, not variables.
+> The build system uses a regex (`transFuncRe`) to statically scan `.ts`/`.js` source for
+> `T("...")` and `__m("...")` calls. Only literal string arguments are detected and registered
+> as `ScriptMessages` in the build output. Variable arguments are invisible to the scanner,
+> so the translation will be missing at runtime.
+>
+> The build pipeline for script translations:
+> 1. `BuildScripts` reads the `.ts` file source
+> 2. `translateScript` regex-matches `T("literal")` → creates `Translation{Type: "script"}`
+> 3. `MergeTranslations` looks up the literal in `messages:` from the source locale YAML to get the translated value, then stores it in `ScriptMessages`
+> 4. `writeLocaleFiles` clears `Messages` but keeps `ScriptMessages` in the build output (`public/.locales/`)
+> 5. At runtime, `parser.Locale()` reads the build output → `ScriptMessages` is injected into `__sui_locale`
+> 6. `T("literal")` at runtime looks up `__sui_locale["literal"]` and returns the translation
+>
+> **Wrong** — variable argument (translation silently missing):
+>
+> ```typescript
+> const DOWNLOADS = { macos: { labelKey: "Download for macOS", url: "..." } };
+> function init() {
+>   const info = DOWNLOADS["macos"];
+>   label.textContent = T(info.labelKey); // ✗ — build cannot detect the string
+> }
+> ```
+>
+> **Correct** — string literal arguments:
+>
+> ```typescript
+> function downloadLabel(os: string): string {
+>   if (os === "windows") return T("Download for Windows");
+>   if (os === "linux") return T("Download for Linux");
+>   return T("Download for macOS");
+> }
+> ```
+>
+> **Also required**: The English source string (e.g. `"Download for macOS"`) must exist as a
+> key in the `messages:` section of the **page-level** source locale file (e.g.
+> `__locales/zh-cn/features.yml`) with its translation as the value. This is how
+> `MergeTranslations` resolves the translated text for `ScriptMessages`.
 
 > **Important**: `s:trans` captures the **trimmed text content** of the element as the lookup key.
 > The key in `messages:` must match **exactly** (case-sensitive, whitespace-trimmed).
@@ -732,6 +828,43 @@ to ensure `keys:` are properly generated from `messages:`.
 
 **Do NOT** clear `keys:` to `{}` expecting `yao sui trans` to regenerate.
 **Do NOT** rely on `yao sui trans` alone to add new keys — it only updates existing ones.
+
+> **PITFALL — New `s:trans` elements not translated after build**
+>
+> When you add a **new** `s:trans` element to an existing component HTML, the build will
+> auto-assign the next sequential key (e.g. `trans__features_cta_4`). However, the new key
+> only appears in the **compiled** output (`public/.locales/`), not in the source locale
+> file (`__locales/`). If the source `keys:` block does not contain this new key with its
+> translated value, the compiled output will fall back to the English original.
+>
+> **Symptom**: New `s:trans` text stays in English while other text on the page translates fine.
+>
+> **Fix**: After adding new `s:trans` elements:
+> 1. Add the English → translated mapping to `messages:` in all locale files
+> 2. Run `yao sui build` once to generate the new key numbers
+> 3. Check the compiled output `public/.locales/<lang>/<route>.yml` to find the new key
+>    (e.g. `trans__features_cta_4: Other platforms & architectures →`)
+> 4. Copy the new key back to the source `keys:` in `__locales/<lang>/<route>.yml`,
+>    replacing the English value with the correct translation
+> 5. Rebuild
+>
+> **Example**: Adding `<a s:trans>Other platforms & architectures →</a>` to `cta.html`
+> that already had 3 translated elements:
+> ```yaml
+> # __locales/zh-cn/features/cta.yml — BEFORE (broken)
+> keys:
+>     trans__features_cta_1: 你的 AI 团队待命中
+>     trans__features_cta_2: 下载即用，几分钟上手。
+>     trans__features_cta_3: 下载
+> # key _4 is missing → "Other platforms & architectures →" stays in English
+>
+> # __locales/zh-cn/features/cta.yml — AFTER (fixed)
+> keys:
+>     trans__features_cta_1: 你的 AI 团队待命中
+>     trans__features_cta_2: 下载即用，几分钟上手。
+>     trans__features_cta_3: 下载
+>     trans__features_cta_4: 其他平台与架构 →
+> ```
 
 ## Dynamic `<html lang>`
 
