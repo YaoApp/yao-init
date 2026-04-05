@@ -137,8 +137,20 @@ yao sui trans <sui> <template>      # Extract i18n strings
 
 ## Backend Script (`<page>.backend.ts`)
 
+There are three types of backend functions, each with different auth mechanisms:
+
 ```typescript
-// Called before page render
+// Type declarations for auth
+interface AuthorizedInfo {
+  user_id?: string;
+  email?: string;
+  team_id?: string;
+  owner_id?: string;
+}
+declare function Authorized(): AuthorizedInfo | null;
+
+// 1. BeforeRender — called before page render
+//    Auth: request.authorized (request is the first arg)
 function BeforeRender(request: Request): Record<string, any> {
   const id = request.params.id;  // NOT $param.id
   return {
@@ -147,18 +159,29 @@ function BeforeRender(request: Request): Record<string, any> {
   };
 }
 
-// API method - called via $Backend().Call("GetUsers")
-function ApiGetUsers(request: Request): any[] {
-  return Process("models.user.Get", {});
+// 2. ApiXxx — called via $Backend().Call("GetUsers")
+//    Auth: Authorized() global function (request is NOT passed)
+//    Args: only what frontend sends
+function ApiGetUsers(): any[] {
+  const auth = Authorized();
+  if (!auth?.user_id) throw new Error("unauthorized");
+  return Process("models.user.Get", {
+    wheres: [{ column: "user_id", value: auth.user_id }],
+  });
 }
 
-// Called from .json as "@GetRecord"
+// 3. @FuncName — called from .json data binding
+//    Auth: request.authorized (request is appended as last arg by SUI core)
 function GetRecord(request: Request): any {
   return Process("models.record.Find", request.params.id);
 }
 ```
 
 > **Important**: `$param` is NOT available in backend scripts. Use `request.params`.
+>
+> **CRITICAL**: `ApiXxx` functions called via `$Backend().Call` do NOT receive a `request`
+> parameter. Use the `Authorized()` global function for user identity. See
+> `references/backend-api.md` for the full explanation and Go runtime source references.
 
 ---
 
@@ -298,10 +321,20 @@ self.Increment = () => {
 ```typescript
 import { $Backend } from "@yao/sui";
 
-// Calls ApiGetUsers in backend script
+// Calls ApiGetUsers() in backend script — no request param is passed
 const users = await $Backend().Call("GetUsers");
+
+// Calls ApiGetUser(123) — args are passed positionally
 const user = await $Backend().Call("GetUser", 123);
+
+// Calls ApiCreateItem("Widget", 9.99) in backend script
+// Backend uses Authorized() to get user identity, NOT request param
+const item = await $Backend().Call("CreateItem", "Widget", 9.99);
 ```
+
+> **Note**: `$Backend().Call` sends only your explicit arguments to the backend `ApiXxx`
+> function. Authentication info is injected into the V8 context by the guard system and
+> accessed via the `Authorized()` global function — not via a `request` parameter.
 
 ## Component Query
 
@@ -349,18 +382,18 @@ await api.Post<User>("/users", { name: "John" });
 ```json
 {
   "title": "Page Title",
-  "guard": "oauth",
+  "guard": "oauth:/login",
   "cache": 3600,
   "dataCache": 300,
-  "seo": {
-    "title": "SEO Title",
-    "description": "Meta description"
-  },
   "api": {
     "defaultGuard": "oauth",
     "guards": {
       "PublicMethod": "-"
     }
+  },
+  "seo": {
+    "title": "SEO Title",
+    "description": "Meta description"
   }
 }
 ```
@@ -373,6 +406,32 @@ await api.Post<User>("/users", { name: "John" });
 | `bearer-jwt` | Bearer token JWT              |
 | `cookie-jwt` | Cookie-based JWT              |
 | `-`          | Public (no auth)              |
+
+## Guard Scope (CRITICAL — Two Separate Systems)
+
+The `guard` and `api.defaultGuard` fields serve **different purposes**:
+
+| Config Field | Protects | When It Runs | Sets Auth For |
+|---|---|---|---|
+| `"guard"` | **Page render** (HTML response) | When browser loads the page | `request.authorized`, `$auth` in templates |
+| `"api.defaultGuard"` | **`$Backend().Call` API calls** | When frontend calls `$Backend().Call(...)` | `Authorized()` global function in V8 |
+
+**You MUST set both** if your page has backend API methods that need authentication:
+
+```json
+{
+  "guard": "oauth:/login",
+  "api": { "defaultGuard": "oauth" }
+}
+```
+
+**Common mistake**: Only setting `"guard"` but not `"api"`. The page renders correctly
+(user sees the page), but clicking a button that calls `$Backend().Call("CreateItem")`
+fails with `unauthorized` because `apiGuard()` has no config and skips authentication.
+
+The guard value supports an optional redirect suffix separated by `:`:
+- `"oauth"` — returns 403 JSON error if not authenticated
+- `"oauth:/login"` — redirects to `/login` if not authenticated (for page guard only)
 
 ## Content Negotiation — Markdown Output
 
@@ -934,11 +993,25 @@ sendAction("navigate", { route: "/agents/demo/detail", title: "Details" });
 
 ## Common Patterns
 
-**Protected page with API**:
+**Protected page with API** (always set both guards):
 
 ```json
-// page.config
-{ "guard": "oauth", "api": { "defaultGuard": "oauth" } }
+// page.config — BOTH "guard" AND "api.defaultGuard" are required
+{ "guard": "oauth:/login", "api": { "defaultGuard": "oauth" } }
+```
+
+**Backend script with auth** (`ApiXxx` uses `Authorized()`, NOT `request`):
+
+```typescript
+// page.backend.ts
+declare function Authorized(): { user_id?: string; team_id?: string } | null;
+
+function ApiDeleteItem(id: string) {
+  const auth = Authorized();
+  if (!auth?.user_id) throw new Error("unauthorized");
+  Process("models.item.Delete", id);
+  return { success: true };
+}
 ```
 
 **List with delete**:
