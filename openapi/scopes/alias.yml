@@ -50,6 +50,7 @@ client:free:
   - nodes:all
   - __yao:all
   - api:all
+  - setting:all
 
 client:pro:
   - app:all
@@ -71,6 +72,7 @@ client:pro:
   - nodes:all
   - __yao:all
   - api:all
+  - setting:all
 
 client:ent:
   - app:all
@@ -92,6 +94,7 @@ client:ent:
   - nodes:all
   - __yao:all
   - api:all
+  - setting:all
 
 # ================================================
 # 2. User/Team Roles - User/Team Subscription Tiers
@@ -124,6 +127,7 @@ user:free:
   - nodes:all:own
   - __yao:all:own
   - api:all:own
+  - setting:all:own
 
 user:pro:
   - app:all:own
@@ -145,6 +149,7 @@ user:pro:
   - nodes:all:own
   - __yao:all:own
   - api:all:own
+  - setting:all:own
 
 user:ent:
   - app:all:own
@@ -166,6 +171,7 @@ user:ent:
   - nodes:all:own
   - __yao:all:own
   - api:all:own
+  - setting:all:own
 
 # ================================================
 # 3. Team Member Roles
@@ -195,6 +201,7 @@ team:owner:
   - nodes:all:team
   - __yao:all:team
   - api:all:team
+  - setting:all:team
 
 team:admin:
   - app:all:team
@@ -216,6 +223,7 @@ team:admin:
   - nodes:all:team
   - __yao:all:team
   - api:all:team
+  - setting:all:team
 
 team:member:
   - app:read:team
@@ -251,6 +259,7 @@ team:member:
   - nodes:read:team
   - __yao:all:team
   - api:all:own
+  - setting:read:team
 
 # ================================================
 # Resources Aliases
@@ -961,3 +970,92 @@ nodes:read:team:
 
 nodes:read:own:
   - nodes:nodes:read:own
+
+# ============ Setting Resources Aliases ============
+
+setting:all:
+  - setting:cloud:read:all
+  - setting:cloud:write:all
+  - setting:llm:read:all
+  - setting:llm:write:all
+  - setting:search:read:all
+  - setting:search:write:all
+  - setting:smtp:read:all
+  - setting:smtp:write:all
+  - setting:mcp:read:all
+  - setting:mcp:write:all
+  - setting:sandbox:read:all
+  - setting:sandbox:write:all
+  - setting:setup-status:read:all
+  - setting:preference:read:all
+  - setting:preference:write:all
+
+setting:all:own:
+  - setting:cloud:read:own
+  - setting:cloud:write:own
+  - setting:llm:read:own
+  - setting:llm:write:own
+  - setting:search:read:own
+  - setting:search:write:own
+  - setting:smtp:read:own
+  - setting:smtp:write:own
+  - setting:mcp:read:own
+  - setting:mcp:write:own
+  - setting:sandbox:read:own
+  - setting:sandbox:write:own
+  - setting:setup-status:read:own
+  - setting:preference:read:own
+  - setting:preference:write:own
+
+setting:all:team:
+  - setting:cloud:read:team
+  - setting:cloud:write:team
+  - setting:llm:read:team
+  - setting:llm:write:team
+  - setting:search:read:team
+  - setting:search:write:team
+  - setting:smtp:read:team
+  - setting:smtp:write:team
+  - setting:mcp:read:team
+  - setting:mcp:write:team
+  - setting:sandbox:read:team
+  - setting:sandbox:write:team
+  - setting:setup-status:read:team
+  - setting:preference:read:team
+  - setting:preference:write:team
+
+setting:manage:team:
+  - setting:cloud:read:team
+  - setting:cloud:write:team
+  - setting:llm:read:team
+  - setting:llm:write:team
+  - setting:search:read:team
+  - setting:search:write:team
+  - setting:smtp:read:team
+  - setting:smtp:write:team
+  - setting:mcp:read:team
+  - setting:mcp:write:team
+  - setting:sandbox:read:team
+  - setting:sandbox:write:team
+  - setting:setup-status:read:team
+  - setting:preference:read:team
+  - setting:preference:write:team
+
+setting:read:team:
+  - setting:cloud:read:team
+  - setting:llm:read:team
+  - setting:search:read:team
+  - setting:smtp:read:team
+  - setting:mcp:read:team
+  - setting:sandbox:read:team
+  - setting:setup-status:read:team
+  - setting:preference:read:team
+
+setting:write:own:
+  - setting:cloud:write:own
+  - setting:llm:write:own
+  - setting:search:write:own
+  - setting:smtp:write:own
+  - setting:mcp:write:own
+  - setting:sandbox:write:own
+  - setting:preference:write:own
