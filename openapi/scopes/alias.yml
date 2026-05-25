@@ -986,6 +986,8 @@ setting:all:
   - setting:mcp:write:all
   - setting:sandbox:read:all
   - setting:sandbox:write:all
+  - setting:agent:read:all
+  - setting:agent:write:all
   - setting:setup-status:read:all
   - setting:preference:read:all
   - setting:preference:write:all
@@ -1003,6 +1005,8 @@ setting:all:own:
   - setting:mcp:write:own
   - setting:sandbox:read:own
   - setting:sandbox:write:own
+  - setting:agent:read:own
+  - setting:agent:write:own
   - setting:setup-status:read:own
   - setting:preference:read:own
   - setting:preference:write:own
@@ -1020,6 +1024,8 @@ setting:all:team:
   - setting:mcp:write:team
   - setting:sandbox:read:team
   - setting:sandbox:write:team
+  - setting:agent:read:team
+  - setting:agent:write:team
   - setting:setup-status:read:team
   - setting:preference:read:team
   - setting:preference:write:team
@@ -1037,6 +1043,8 @@ setting:manage:team:
   - setting:mcp:write:team
   - setting:sandbox:read:team
   - setting:sandbox:write:team
+  - setting:agent:read:team
+  - setting:agent:write:team
   - setting:setup-status:read:team
   - setting:preference:read:team
   - setting:preference:write:team
@@ -1048,6 +1056,7 @@ setting:read:team:
   - setting:smtp:read:team
   - setting:mcp:read:team
   - setting:sandbox:read:team
+  - setting:agent:read:team
   - setting:setup-status:read:team
   - setting:preference:read:team
 
@@ -1058,4 +1067,5 @@ setting:write:own:
   - setting:smtp:write:own
   - setting:mcp:write:own
   - setting:sandbox:write:own
+  - setting:agent:write:own
   - setting:preference:write:own
