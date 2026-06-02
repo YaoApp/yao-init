@@ -41,6 +41,7 @@ client:free:
   - job:all
   - agent:all
   - chat:all
+  - experts:all
   - otp:all
   - messenger:all
   - trace:all
@@ -60,6 +61,7 @@ client:pro:
   - job:all
   - agent:all
   - chat:all
+  - experts:all
   - otp:all
   - dsl:all
   - llm:all
@@ -82,6 +84,7 @@ client:ent:
   - job:all
   - agent:all
   - chat:all
+  - experts:all
   - otp:all
   - dsl:all
   - llm:all
@@ -116,6 +119,7 @@ user:free:
   - job:all:own
   - agent:read:own
   - chat:all:own
+  - experts:all:own
   - otp:all:own
   - llm:all:own
   - mcp:all:own
@@ -137,6 +141,7 @@ user:pro:
   - job:all:own
   - agent:all:own
   - chat:all:own
+  - experts:all:own
   - otp:all:own
   - dsl:all:own
   - llm:all:own
@@ -159,6 +164,7 @@ user:ent:
   - job:all:own
   - agent:all:own
   - chat:all:own
+  - experts:all:own
   - otp:all:own
   - dsl:all:own
   - llm:all:own
@@ -189,6 +195,7 @@ team:owner:
   - job:all:team
   - agent:all:team
   - chat:all:team
+  - experts:all:team
   - otp:all:team
   - dsl:all:team
   - llm:all:team
@@ -211,6 +218,7 @@ team:admin:
   - job:manage:team
   - agent:manage:team
   - chat:manage:team
+  - experts:all:team
   - otp:manage:team
   - dsl:manage:team
   - llm:manage:team
@@ -241,6 +249,7 @@ team:member:
   - agent:write:own
   - chat:read:team
   - chat:write:own
+  - experts:all:own
   - dsl:read:team
   - dsl:write:own
   - llm:read:team
@@ -687,6 +696,17 @@ chat:write:own:
   - chat:completions:write:own
   - chat:sessions:write:own
 
+# ============ Experts Resources Aliases ============
+
+experts:all:
+  - experts:completions:write:all
+
+experts:all:own:
+  - experts:completions:write:own
+
+experts:all:team:
+  - experts:completions:write:team
+
 # ============ DSL Resources Aliases ============
 
 dsl:all:
@@ -991,6 +1011,8 @@ setting:all:
   - setting:setup-status:read:all
   - setting:preference:read:all
   - setting:preference:write:all
+  - setting:api-keys:read:all
+  - setting:api-keys:write:all
 
 setting:all:own:
   - setting:cloud:read:own
@@ -1010,6 +1032,8 @@ setting:all:own:
   - setting:setup-status:read:own
   - setting:preference:read:own
   - setting:preference:write:own
+  - setting:api-keys:read:own
+  - setting:api-keys:write:own
 
 setting:all:team:
   - setting:cloud:read:team
@@ -1029,6 +1053,8 @@ setting:all:team:
   - setting:setup-status:read:team
   - setting:preference:read:team
   - setting:preference:write:team
+  - setting:api-keys:read:team
+  - setting:api-keys:write:team
 
 setting:manage:team:
   - setting:cloud:read:team
@@ -1048,6 +1074,8 @@ setting:manage:team:
   - setting:setup-status:read:team
   - setting:preference:read:team
   - setting:preference:write:team
+  - setting:api-keys:read:team
+  - setting:api-keys:write:team
 
 setting:read:team:
   - setting:cloud:read:team
@@ -1059,6 +1087,7 @@ setting:read:team:
   - setting:agent:read:team
   - setting:setup-status:read:team
   - setting:preference:read:team
+  - setting:api-keys:read:team
 
 setting:write:own:
   - setting:cloud:write:own
@@ -1069,3 +1098,4 @@ setting:write:own:
   - setting:sandbox:write:own
   - setting:agent:write:own
   - setting:preference:write:own
+  - setting:api-keys:write:own
