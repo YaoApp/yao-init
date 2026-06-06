@@ -49,6 +49,7 @@ client:free:
   - computer:all
   - workspace:all
   - nodes:all
+  - tai:all
   - __yao:all
   - api:all
   - setting:all
@@ -72,6 +73,7 @@ client:pro:
   - computer:all
   - workspace:all
   - nodes:all
+  - tai:all
   - __yao:all
   - api:all
   - setting:all
@@ -95,6 +97,7 @@ client:ent:
   - computer:all
   - workspace:all
   - nodes:all
+  - tai:all
   - __yao:all
   - api:all
   - setting:all
@@ -129,6 +132,7 @@ user:free:
   - computer:all:own
   - workspace:all:own
   - nodes:all:own
+  - tai:all:own
   - __yao:all:own
   - api:all:own
   - setting:all:own
@@ -152,6 +156,7 @@ user:pro:
   - computer:all:own
   - workspace:all:own
   - nodes:all:own
+  - tai:all:own
   - __yao:all:own
   - api:all:own
   - setting:all:own
@@ -175,6 +180,7 @@ user:ent:
   - computer:all:own
   - workspace:all:own
   - nodes:all:own
+  - tai:all:own
   - __yao:all:own
   - api:all:own
   - setting:all:own
@@ -206,6 +212,7 @@ team:owner:
   - computer:all:team
   - workspace:all:team
   - nodes:all:team
+  - tai:all:team
   - __yao:all:team
   - api:all:team
   - setting:all:team
@@ -229,6 +236,7 @@ team:admin:
   - computer:all:team
   - workspace:manage:team
   - nodes:all:team
+  - tai:all:team
   - __yao:all:team
   - api:all:team
   - setting:all:team
@@ -266,6 +274,7 @@ team:member:
   - workspace:read:team
   - workspace:write:own
   - nodes:read:team
+  - tai:all:own
   - __yao:all:team
   - api:all:own
   - setting:read:team
@@ -1099,3 +1108,20 @@ setting:write:own:
   - setting:agent:write:own
   - setting:preference:write:own
   - setting:api-keys:write:own
+
+# ============ Tai Resources Aliases ============
+
+tai:all:
+  - tai:webproxy:read:all
+  - tai:webproxy:write:all
+  - tai:webproxy:delete:all
+
+tai:all:own:
+  - tai:webproxy:read:own
+  - tai:webproxy:write:own
+  - tai:webproxy:delete:own
+
+tai:all:team:
+  - tai:webproxy:read:team
+  - tai:webproxy:write:team
+  - tai:webproxy:delete:team

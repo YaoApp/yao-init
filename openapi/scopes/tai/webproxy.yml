@@ -1,0 +1,62 @@
+# Tai - Webproxy Bindings
+# namespace: tai
+# resource: webproxy
+# actions: read, write, delete
+# levels: all, own, team
+
+# ============ Read Webproxy Bindings ============
+
+tai:webproxy:read:all:
+  description: "List all webproxy bindings"
+  endpoints:
+    - GET /tai/:taiID/webproxy/bindings
+
+tai:webproxy:read:own:
+  owner: true
+  description: "List own webproxy bindings"
+  endpoints:
+    - GET /tai/:taiID/webproxy/bindings
+
+tai:webproxy:read:team:
+  team: true
+  description: "List team webproxy bindings"
+  endpoints:
+    - GET /tai/:taiID/webproxy/bindings
+
+# ============ Write Webproxy Bindings ============
+
+tai:webproxy:write:all:
+  description: "Create webproxy bindings"
+  endpoints:
+    - POST /tai/:taiID/webproxy/bindings
+
+tai:webproxy:write:own:
+  owner: true
+  description: "Create own webproxy bindings"
+  endpoints:
+    - POST /tai/:taiID/webproxy/bindings
+
+tai:webproxy:write:team:
+  team: true
+  description: "Create team webproxy bindings"
+  endpoints:
+    - POST /tai/:taiID/webproxy/bindings
+
+# ============ Delete Webproxy Bindings ============
+
+tai:webproxy:delete:all:
+  description: "Delete webproxy bindings"
+  endpoints:
+    - DELETE /tai/:taiID/webproxy/bindings/:hostPort
+
+tai:webproxy:delete:own:
+  owner: true
+  description: "Delete own webproxy bindings"
+  endpoints:
+    - DELETE /tai/:taiID/webproxy/bindings/:hostPort
+
+tai:webproxy:delete:team:
+  team: true
+  description: "Delete team webproxy bindings"
+  endpoints:
+    - DELETE /tai/:taiID/webproxy/bindings/:hostPort
