@@ -42,6 +42,7 @@ client:free:
   - agent:all
   - chat:all
   - experts:all
+  - tasks:all
   - otp:all
   - messenger:all
   - trace:all
@@ -63,6 +64,7 @@ client:pro:
   - agent:all
   - chat:all
   - experts:all
+  - tasks:all
   - otp:all
   - dsl:all
   - llm:all
@@ -87,6 +89,7 @@ client:ent:
   - agent:all
   - chat:all
   - experts:all
+  - tasks:all
   - otp:all
   - dsl:all
   - llm:all
@@ -123,6 +126,7 @@ user:free:
   - agent:read:own
   - chat:all:own
   - experts:all:own
+  - tasks:all:own
   - otp:all:own
   - llm:all:own
   - mcp:all:own
@@ -146,6 +150,7 @@ user:pro:
   - agent:all:own
   - chat:all:own
   - experts:all:own
+  - tasks:all:own
   - otp:all:own
   - dsl:all:own
   - llm:all:own
@@ -170,6 +175,7 @@ user:ent:
   - agent:all:own
   - chat:all:own
   - experts:all:own
+  - tasks:all:own
   - otp:all:own
   - dsl:all:own
   - llm:all:own
@@ -202,6 +208,7 @@ team:owner:
   - agent:all:team
   - chat:all:team
   - experts:all:team
+  - tasks:all:team
   - otp:all:team
   - dsl:all:team
   - llm:all:team
@@ -226,6 +233,7 @@ team:admin:
   - agent:manage:team
   - chat:manage:team
   - experts:all:team
+  - tasks:all:team
   - otp:manage:team
   - dsl:manage:team
   - llm:manage:team
@@ -258,6 +266,7 @@ team:member:
   - chat:read:team
   - chat:write:own
   - experts:all:own
+  - tasks:all:own
   - dsl:read:team
   - dsl:write:own
   - llm:read:team
@@ -590,6 +599,10 @@ agent:all:
   - agent:robots:trigger:all
   - agent:robots:results:all
   - agent:robots:activities:all
+  - agent:tasks:read:all
+  - agent:tasks:write:all
+  - agent:tasks:delete:all
+  - agent:tasks:execute:all
 
 agent:all:own:
   - agent:assistants:read:own
@@ -604,6 +617,10 @@ agent:all:own:
   - agent:robots:trigger:own
   - agent:robots:results:own
   - agent:robots:activities:own
+  - agent:tasks:read:own
+  - agent:tasks:write:own
+  - agent:tasks:delete:own
+  - agent:tasks:execute:own
 
 agent:all:team:
   - agent:assistants:read:team
@@ -618,6 +635,10 @@ agent:all:team:
   - agent:robots:trigger:team
   - agent:robots:results:team
   - agent:robots:activities:team
+  - agent:tasks:read:team
+  - agent:tasks:write:team
+  - agent:tasks:delete:team
+  - agent:tasks:execute:team
 
 agent:manage:team:
   - agent:assistants:read:team
@@ -631,6 +652,10 @@ agent:manage:team:
   - agent:robots:trigger:team
   - agent:robots:results:team
   - agent:robots:activities:team
+  - agent:tasks:read:team
+  - agent:tasks:write:team
+  - agent:tasks:delete:team
+  - agent:tasks:execute:team
 
 agent:read:own:
   - agent:assistants:read:own
@@ -639,6 +664,8 @@ agent:read:own:
   - agent:robots:execute:own
   - agent:robots:results:own
   - agent:robots:activities:own
+  - agent:tasks:read:own
+  - agent:tasks:execute:own
 
 agent:read:team:
   - agent:assistants:read:team
@@ -647,6 +674,8 @@ agent:read:team:
   - agent:robots:execute:team
   - agent:robots:results:team
   - agent:robots:activities:team
+  - agent:tasks:read:team
+  - agent:tasks:execute:team
 
 agent:write:own:
   - agent:assistants:write:own
@@ -715,6 +744,26 @@ experts:all:own:
 
 experts:all:team:
   - experts:completions:write:team
+
+# ============ Tasks Resources Aliases ============
+
+tasks:all:
+  - agent:tasks:read:all
+  - agent:tasks:write:all
+  - agent:tasks:delete:all
+  - agent:tasks:execute:all
+
+tasks:all:own:
+  - agent:tasks:read:own
+  - agent:tasks:write:own
+  - agent:tasks:delete:own
+  - agent:tasks:execute:own
+
+tasks:all:team:
+  - agent:tasks:read:team
+  - agent:tasks:write:team
+  - agent:tasks:delete:team
+  - agent:tasks:execute:team
 
 # ============ DSL Resources Aliases ============
 
