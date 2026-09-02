@@ -1069,6 +1069,8 @@ setting:all:
   - setting:llm:write:all
   - setting:search:read:all
   - setting:search:write:all
+  - setting:ocr:read:all
+  - setting:ocr:write:all
   - setting:smtp:read:all
   - setting:smtp:write:all
   - setting:mcp:read:all
@@ -1090,6 +1092,8 @@ setting:all:own:
   - setting:llm:write:own
   - setting:search:read:own
   - setting:search:write:own
+  - setting:ocr:read:own
+  - setting:ocr:write:own
   - setting:smtp:read:own
   - setting:smtp:write:own
   - setting:mcp:read:own
@@ -1111,6 +1115,8 @@ setting:all:team:
   - setting:llm:write:team
   - setting:search:read:team
   - setting:search:write:team
+  - setting:ocr:read:team
+  - setting:ocr:write:team
   - setting:smtp:read:team
   - setting:smtp:write:team
   - setting:mcp:read:team
@@ -1132,6 +1138,8 @@ setting:manage:team:
   - setting:llm:write:team
   - setting:search:read:team
   - setting:search:write:team
+  - setting:ocr:read:team
+  - setting:ocr:write:team
   - setting:smtp:read:team
   - setting:smtp:write:team
   - setting:mcp:read:team
@@ -1150,6 +1158,7 @@ setting:read:team:
   - setting:cloud:read:team
   - setting:llm:read:team
   - setting:search:read:team
+  - setting:ocr:read:team
   - setting:smtp:read:team
   - setting:mcp:read:team
   - setting:sandbox:read:team
@@ -1162,6 +1171,7 @@ setting:write:own:
   - setting:cloud:write:own
   - setting:llm:write:own
   - setting:search:write:own
+  - setting:ocr:write:own
   - setting:smtp:write:own
   - setting:mcp:write:own
   - setting:sandbox:write:own
