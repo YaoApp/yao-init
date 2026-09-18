@@ -1065,6 +1065,8 @@ nodes:read:own:
 setting:all:
   - setting:cloud:read:all
   - setting:cloud:write:all
+  - setting:tao:read:all
+  - setting:tao:write:all
   - setting:llm:read:all
   - setting:llm:write:all
   - setting:search:read:all
@@ -1088,6 +1090,8 @@ setting:all:
 setting:all:own:
   - setting:cloud:read:own
   - setting:cloud:write:own
+  - setting:tao:read:own
+  - setting:tao:write:own
   - setting:llm:read:own
   - setting:llm:write:own
   - setting:search:read:own
@@ -1111,6 +1115,8 @@ setting:all:own:
 setting:all:team:
   - setting:cloud:read:team
   - setting:cloud:write:team
+  - setting:tao:read:team
+  - setting:tao:write:team
   - setting:llm:read:team
   - setting:llm:write:team
   - setting:search:read:team
@@ -1134,6 +1140,8 @@ setting:all:team:
 setting:manage:team:
   - setting:cloud:read:team
   - setting:cloud:write:team
+  - setting:tao:read:team
+  - setting:tao:write:team
   - setting:llm:read:team
   - setting:llm:write:team
   - setting:search:read:team
@@ -1156,6 +1164,7 @@ setting:manage:team:
 
 setting:read:team:
   - setting:cloud:read:team
+  - setting:tao:read:team
   - setting:llm:read:team
   - setting:search:read:team
   - setting:ocr:read:team
@@ -1169,6 +1178,7 @@ setting:read:team:
 
 setting:write:own:
   - setting:cloud:write:own
+  - setting:tao:write:own
   - setting:llm:write:own
   - setting:search:write:own
   - setting:ocr:write:own

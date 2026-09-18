@@ -9,13 +9,13 @@
   "form": {
     "username": {
       "placeholder": "请输入邮箱",
-      "fields": ["email"],
+      "fields": [ "email" ],
     },
     "password": { "placeholder": "登录密码" },
     "confirm_password": { "placeholder": "确认密码" },
 
     // 验证码配置
-    "captcha": { "type": "image", "options": {} },
+    "captcha": { "type": "image", "options": { } },
     "forgot_password_link": true,
     "remember_me": true,
     "terms_of_service_link": "https://yaoapps.com/doc/guide/user/terms-of-service",
@@ -42,7 +42,8 @@
   },
 
   // 注册设置
-  "invite_required": true, // 是否需要邀请才能注册
+  "verification_code_required": false, // 禁用邮箱/手机登录/注册的验证码
+  "invite_required": false, // 是否需要邀请才能注册
   "auto_login": true, // 注册后是否自动登录
   "role": "user:free", // 新用户默认角色
   "type": "free_zh", // 新用户默认类型

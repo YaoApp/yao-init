@@ -10,13 +10,13 @@
   "form": {
     "username": {
       "placeholder": "Enter your email",
-      "fields": ["email"],
+      "fields": [ "email" ],
     },
     "password": { "placeholder": "Password" },
     "confirm_password": { "placeholder": "Confirm Password" },
 
     // Captcha config
-    "captcha": { "type": "image", "options": {} },
+    "captcha": { "type": "image", "options": { } },
 
     "forgot_password_link": true,
     "remember_me": true,
@@ -44,7 +44,8 @@
   },
 
   // Registration settings
-  "invite_required": true, // Whether to require invite to register
+  "verification_code_required": false, // Disable verification code for email/mobile login/register
+  "invite_required": false, // Whether to require invite to register
   "auto_login": true, // Whether to auto login after register
   "role": "user:free", // Default role for new users
   "type": "free", // Default type for new users
