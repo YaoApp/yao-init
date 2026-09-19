@@ -18,8 +18,8 @@
     "captcha": { "type": "image", "options": { } },
     "forgot_password_link": true,
     "remember_me": true,
-    "terms_of_service_link": "https://yaoapps.com/doc/guide/user/terms-of-service",
-    "privacy_policy_link": "https://yaoapps.com/doc/guide/user/privacy-policy",
+    "terms_of_service_link": "https://yaoagents.cn/docs/zh-cn/terms/yao-service",
+    "privacy_policy_link": "https://yaoagents.cn/docs/zh-cn/docs/zh-cn/privacy/yao-privacy-policy",
   },
 
   // Token 配置（来自 signin）

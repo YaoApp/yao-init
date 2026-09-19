@@ -20,8 +20,8 @@
 
     "forgot_password_link": true,
     "remember_me": true,
-    "terms_of_service_link": "https://yaoapps.com/doc/guide/user/terms-of-service",
-    "privacy_policy_link": "https://yaoapps.com/doc/guide/user/privacy-policy",
+    "terms_of_service_link": "https://yaoagents.com/docs/en-us/terms/yao-service",
+    "privacy_policy_link": "https://yaoagents.com/docs/en-us/docs/en-us/privacy/yao-privacy-policy",
   },
 
   // Token config (from signin)
