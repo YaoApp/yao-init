@@ -1192,16 +1192,22 @@ setting:write:own:
 # ============ Tai Resources Aliases ============
 
 tai:all:
+  - tai:vnc:read:all
+  - tai:proxy:read:all
   - tai:webproxy:read:all
   - tai:webproxy:write:all
   - tai:webproxy:delete:all
 
 tai:all:own:
+  - tai:vnc:read:own
+  - tai:proxy:read:own
   - tai:webproxy:read:own
   - tai:webproxy:write:own
   - tai:webproxy:delete:own
 
 tai:all:team:
+  - tai:vnc:read:team
+  - tai:proxy:read:team
   - tai:webproxy:read:team
   - tai:webproxy:write:team
   - tai:webproxy:delete:team
